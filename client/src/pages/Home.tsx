@@ -212,77 +212,233 @@ function Hero() {
   );
 }
 
-// ─── Problem Section ──────────────────────────────────────────────────────────
+// ─── Circuit Board Problem Infographic ───────────────────────────────────────
 function Problem() {
+  const [active, setActive] = useState<string | null>(null);
+
+  const problems = [
+    {
+      id: "p1", num: "01", title: "Double Transaction",
+      short: "3 checkouts for 1 family",
+      body: "A family wants a tour, two t-shirts, and lunch. That's three separate checkouts on three separate systems. The line backs up. The family gets frustrated. Your staff apologizes — again.",
+      color: "#C2622D", x: 18, y: 22, icon: "💳",
+    },
+    {
+      id: "p2", num: "02", title: "Ghost Booking",
+      short: "Sold the same slot twice",
+      body: "Someone books the 10 AM tour online while a walk-in is at your register. Square doesn't know FareHarbor exists. You just double-booked. Now someone drove an hour for nothing.",
+      color: "#1B3A5C", x: 82, y: 18, icon: "👻",
+    },
+    {
+      id: "p3", num: "03", title: "Spreadsheet of Death",
+      short: "2–4 hrs of reconciliation nightly",
+      body: "Every night, someone on your team manually reconciles Square receipts against booking records against waiver signatures. That's not operations. That's punishment.",
+      color: "#2A7D6F", x: 82, y: 82, icon: "📊",
+    },
+    {
+      id: "p4", num: "04", title: "Waiver Scramble",
+      short: "Waiver and payment are strangers",
+      body: "\"Did everyone sign the waiver?\" Your staff asks this while processing payment, checking capacity, and keeping the line moving. The waiver and the transaction live in completely different systems.",
+      color: "#6B4C9A", x: 18, y: 78, icon: "✍️",
+    },
+    {
+      id: "p5", num: "05", title: "Ordering Blindspot",
+      short: "$40K decisions made on gut feel",
+      body: "You want to order more equipment. But booking data is in one system, retail data in another, food revenue somewhere else. You're making major purchasing decisions with no unified data.",
+      color: "#1B3A5C", x: 50, y: 8, icon: "🔍",
+    },
+    {
+      id: "p6", num: "06", title: "Fee Stack",
+      short: "3% booking fee passed to customers",
+      body: "FareHarbor charges 3% per booking. Square charges processing fees. Customers see a surcharge at the register for a booking they made online. They notice. They don't come back.",
+      color: "#C2622D", x: 50, y: 92, icon: "💸",
+    },
+  ];
+
+  const activeProb = problems.find(p => p.id === active);
+
   return (
-    <section id="problem" className="wp-section" style={{ background: "#F4F1EB" }}>
+    <section id="problem" style={{ background: "#0D1F33", padding: "5rem 0", overflow: "hidden" }}>
       <div className="container">
         <FadeIn>
-          <div className="wp-eyebrow" style={{ marginBottom: "1rem" }}>The Problem</div>
-          <div className="teal-rule" />
-          <h2 style={{ fontSize: "clamp(2rem, 4vw, 3rem)", maxWidth: 700, marginBottom: "1.5rem", lineHeight: 1.2 }}>
-            It's a busy Saturday. You're running five systems that have never spoken to each other.
+          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1rem" }}>
+            <div style={{ width: 32, height: 2, background: "#2A7D6F" }} />
+            <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.72rem", fontWeight: 600, color: "#2A7D6F", letterSpacing: "0.15em", textTransform: "uppercase" }}>System Failure Map</span>
+          </div>
+          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(2rem, 4vw, 3rem)", color: "white", maxWidth: 680, marginBottom: "0.75rem", lineHeight: 1.2 }}>
+            Six places your operation breaks every single day.
           </h2>
+          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "1rem", color: "rgba(255,255,255,0.5)", maxWidth: 560, lineHeight: 1.7, marginBottom: "3rem" }}>
+            Tap any node to see the failure. This is what your operation looks like from the inside.
+          </p>
         </FadeIn>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "2rem", marginTop: "3rem" }}>
-          {[
-            {
-              num: "01",
-              title: "The Double Transaction",
-              body: "A family wants a cave tour, two t-shirts, and lunch. That's three separate checkouts on three separate systems. The line backs up. The family gets frustrated. Your staff apologizes — again.",
-              color: "#C2622D",
-            },
-            {
-              num: "02",
-              title: "The Ghost Booking",
-              body: "Someone books the 10 AM kayak tour online while a walk-in is standing at your register. Square doesn't know FareHarbor exists. You just sold the same slot twice. Now someone's driving an hour for nothing.",
-              color: "#1B3A5C",
-            },
-            {
-              num: "03",
-              title: "The Spreadsheet of Death",
-              body: "Every night, someone on your team spends 2–4 hours manually reconciling Square receipts against FareHarbor bookings against waiver signatures. That's not operations. That's punishment.",
-              color: "#2A7D6F",
-            },
-            {
-              num: "04",
-              title: "The Waiver Scramble",
-              body: "\"Did everyone in your party sign the waiver?\" Your staff is asking this question while trying to process payment, check capacity, and keep the line moving. The waiver and the transaction live in completely different systems.",
-              color: "#C2622D",
-            },
-            {
-              num: "05",
-              title: "The Ordering Blindspot",
-              body: "You want to order more tandem kayaks. But your booking data is in FareHarbor and your retail data is in Square and your food revenue is somewhere else entirely. You're making a $40,000 equipment decision on gut feel.",
-              color: "#1B3A5C",
-            },
-            {
-              num: "06",
-              title: "The Fee Stack",
-              body: "FareHarbor charges 3% per booking. Square charges processing fees. If you add a booking platform, that's another fee on top. Your customers see a surcharge at the register for a booking they made online. They notice. They don't come back.",
-              color: "#2A7D6F",
-            },
-          ].map(item => (
-            <FadeIn key={item.num} delay={parseInt(item.num) * 60}>
-              <div className="wp-card" style={{ padding: "2rem", height: "100%" }}>
-                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.7rem", fontWeight: 600, color: item.color, letterSpacing: "0.1em", marginBottom: "1rem" }}>{item.num}</div>
-                <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.2rem", color: "#1B3A5C", marginBottom: "0.75rem", fontWeight: 600 }}>{item.title}</h3>
-                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.92rem", color: "#5A6B7A", lineHeight: 1.7 }}>{item.body}</p>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "3rem", alignItems: "center" }}>
+          {/* Circuit board SVG */}
+          <FadeIn>
+            <div style={{ position: "relative", background: "#0A1628", borderRadius: "1rem", border: "1px solid rgba(42,125,111,0.2)", overflow: "hidden", aspectRatio: "1", boxShadow: "0 0 60px rgba(42,125,111,0.08) inset" }}>
+              {/* PCB grid texture */}
+              <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: 0.06 }} viewBox="0 0 400 400">
+                {Array.from({ length: 20 }).map((_, i) => (
+                  <line key={`h${i}`} x1="0" y1={i * 20} x2="400" y2={i * 20} stroke="#2A7D6F" strokeWidth="0.5" />
+                ))}
+                {Array.from({ length: 20 }).map((_, i) => (
+                  <line key={`v${i}`} x1={i * 20} y1="0" x2={i * 20} y2="400" stroke="#2A7D6F" strokeWidth="0.5" />
+                ))}
+              </svg>
+
+              <svg viewBox="0 0 100 100" style={{ width: "100%", height: "100%", position: "relative", zIndex: 1 }}>
+                {/* Trace lines from each problem node to center */}
+                {problems.map(p => {
+                  const cx = 50, cy = 50;
+                  // Right-angle PCB traces
+                  const midX = p.x < 50 ? cx - (cx - p.x) * 0.5 : cx + (p.x - cx) * 0.5;
+                  return (
+                    <g key={p.id + "-trace"}>
+                      <polyline
+                        points={`${p.x},${p.y} ${midX},${p.y} ${midX},${cy} ${cx},${cy}`}
+                        fill="none"
+                        stroke={active === p.id ? p.color : "rgba(42,125,111,0.25)"}
+                        strokeWidth={active === p.id ? "0.6" : "0.3"}
+                        strokeDasharray={active === p.id ? "none" : "1,1"}
+                        style={{ transition: "stroke 0.3s ease, stroke-width 0.3s ease" }}
+                      />
+                      {/* Trace corner dots */}
+                      <circle cx={midX} cy={p.y} r="0.5" fill={active === p.id ? p.color : "rgba(42,125,111,0.3)"} />
+                      <circle cx={midX} cy={cy} r="0.5" fill={active === p.id ? p.color : "rgba(42,125,111,0.3)"} />
+                    </g>
+                  );
+                })}
+
+                {/* Central Waypoint chip */}
+                <rect x="42" y="42" width="16" height="16" rx="1.5"
+                  fill="#1B3A5C" stroke="#2A7D6F" strokeWidth="0.5" />
+                <rect x="44" y="44" width="12" height="12" rx="1"
+                  fill="#0D1F33" stroke="rgba(42,125,111,0.4)" strokeWidth="0.3" />
+                <text x="50" y="51.5" textAnchor="middle" fill="#7ECFC4"
+                  fontSize="3.5" fontFamily="'JetBrains Mono', monospace" fontWeight="bold">W</text>
+                <text x="50" y="55" textAnchor="middle" fill="rgba(126,207,196,0.5)"
+                  fontSize="1.8" fontFamily="'DM Sans', sans-serif">WAYPOINT</text>
+
+                {/* Problem nodes */}
+                {problems.map(p => (
+                  <g key={p.id} style={{ cursor: "pointer" }} onClick={() => setActive(active === p.id ? null : p.id)}>
+                    {/* Outer glow ring */}
+                    <circle cx={p.x} cy={p.y} r="5.5"
+                      fill="none"
+                      stroke={active === p.id ? p.color : "rgba(255,255,255,0.05)"}
+                      strokeWidth="0.8"
+                      style={{ transition: "stroke 0.3s" }}
+                    />
+                    {/* Main node */}
+                    <circle cx={p.x} cy={p.y} r="4"
+                      fill={active === p.id ? p.color : "#1A2E45"}
+                      stroke={active === p.id ? p.color : "rgba(255,255,255,0.15)"}
+                      strokeWidth="0.5"
+                      style={{ transition: "fill 0.3s, stroke 0.3s" }}
+                    />
+                    {/* Error indicator */}
+                    <circle cx={p.x + 2.8} cy={p.y - 2.8} r="1.2"
+                      fill={active === p.id ? "#FF6B6B" : "#C2622D"}
+                    />
+                    {/* Number label */}
+                    <text x={p.x} y={p.y + 0.8} textAnchor="middle"
+                      fill={active === p.id ? "white" : "rgba(255,255,255,0.5)"}
+                      fontSize="2.5" fontFamily="'JetBrains Mono', monospace" fontWeight="bold"
+                      style={{ transition: "fill 0.3s" }}
+                    >{p.num}</text>
+                    {/* Label below/above node */}
+                    <text
+                      x={p.x}
+                      y={p.y < 50 ? p.y + 8 : p.y - 6}
+                      textAnchor="middle"
+                      fill={active === p.id ? p.color : "rgba(255,255,255,0.35)"}
+                      fontSize="2" fontFamily="'DM Sans', sans-serif"
+                      style={{ transition: "fill 0.3s" }}
+                    >{p.title}</text>
+                  </g>
+                ))}
+              </svg>
+
+              {/* PCB corner decorations */}
+              {[[8,8],[92,8],[8,92],[92,92]].map(([x,y], i) => (
+                <div key={i} style={{
+                  position: "absolute",
+                  left: `${x}%`, top: `${y}%`,
+                  transform: "translate(-50%,-50%)",
+                  width: 12, height: 12,
+                  border: "1.5px solid rgba(42,125,111,0.3)",
+                  borderRadius: "50%",
+                }} />
+              ))}
+            </div>
+          </FadeIn>
+
+          {/* Detail panel */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+            {activeProb ? (
+              <FadeIn key={activeProb.id}>
+                <div style={{
+                  background: "rgba(255,255,255,0.04)", border: `1px solid ${activeProb.color}44`,
+                  borderLeft: `4px solid ${activeProb.color}`,
+                  borderRadius: "0.75rem", padding: "2rem",
+                }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1rem" }}>
+                    <span style={{ fontSize: "1.75rem" }}>{activeProb.icon}</span>
+                    <div>
+                      <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.68rem", color: activeProb.color, letterSpacing: "0.1em", marginBottom: "0.2rem" }}>FAULT {activeProb.num}</div>
+                      <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.4rem", color: "white", fontWeight: 700 }}>{activeProb.title}</h3>
+                    </div>
+                  </div>
+                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.75rem", color: activeProb.color, background: `${activeProb.color}18`, padding: "0.5rem 0.75rem", borderRadius: "0.375rem", marginBottom: "1rem", display: "inline-block" }}>
+                    ⚠ {activeProb.short}
+                  </div>
+                  <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.95rem", color: "rgba(255,255,255,0.75)", lineHeight: 1.75 }}>{activeProb.body}</p>
+                </div>
+              </FadeIn>
+            ) : (
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+                {problems.map(p => (
+                  <button key={p.id} onClick={() => setActive(p.id)} style={{
+                    background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)",
+                    borderRadius: "0.5rem", padding: "0.85rem 1.1rem",
+                    display: "flex", alignItems: "center", gap: "0.85rem",
+                    cursor: "pointer", textAlign: "left", width: "100%",
+                    transition: "all 0.2s ease",
+                  }}
+                    onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.07)"; e.currentTarget.style.borderColor = `${p.color}44`; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = "rgba(255,255,255,0.03)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)"; }}
+                  >
+                    <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.7rem", color: p.color, fontWeight: 700, minWidth: 24 }}>{p.num}</span>
+                    <span style={{ fontSize: "1rem" }}>{p.icon}</span>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 600, fontSize: "0.88rem", color: "rgba(255,255,255,0.85)" }}>{p.title}</div>
+                      <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.75rem", color: "rgba(255,255,255,0.35)", marginTop: "0.15rem" }}>{p.short}</div>
+                    </div>
+                    <span style={{ color: "rgba(255,255,255,0.2)", fontSize: "0.8rem" }}>→</span>
+                  </button>
+                ))}
               </div>
-            </FadeIn>
-          ))}
+            )}
+
+            {activeProb && (
+              <button onClick={() => setActive(null)} style={{
+                background: "transparent", border: "1px solid rgba(255,255,255,0.12)",
+                color: "rgba(255,255,255,0.45)", fontFamily: "'DM Sans', sans-serif",
+                fontSize: "0.8rem", padding: "0.6rem 1rem", borderRadius: "0.375rem",
+                cursor: "pointer", alignSelf: "flex-start",
+              }}>← View all faults</button>
+            )}
+          </div>
         </div>
 
+        {/* Thesis bar */}
         <FadeIn delay={200}>
-          <div style={{
-            marginTop: "3.5rem", padding: "2.5rem", background: "#1B3A5C", borderRadius: "1rem",
-            display: "flex", flexDirection: "column", gap: "1rem",
-          }}>
-            <p style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic", fontSize: "clamp(1.1rem, 2.5vw, 1.4rem)", color: "white", lineHeight: 1.6, maxWidth: 800 }}>
-              "You didn't start a tour operation to spend four hours every night reconciling receipts. Your staff shouldn't have to ask 'Did you sign the waiver?' while they're trying to process a payment. This is solvable."
+          <div style={{ marginTop: "3.5rem", padding: "2rem 2.5rem", background: "rgba(42,125,111,0.1)", border: "1px solid rgba(42,125,111,0.2)", borderRadius: "0.75rem", display: "flex", alignItems: "center", gap: "1.5rem", flexWrap: "wrap" }}>
+            <div style={{ width: 40, height: 40, borderRadius: "50%", background: "#2A7D6F", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontSize: "1.1rem" }}>W</div>
+            <p style={{ fontFamily: "'DM Sans', sans-serif", fontStyle: "italic", fontSize: "0.95rem", color: "rgba(255,255,255,0.7)", lineHeight: 1.7, flex: 1, margin: 0 }}>
+              You didn't start an outdoor recreation operation to spend four hours every night reconciling receipts. Your staff shouldn't have to ask "Did you sign the waiver?" while processing a payment. <strong style={{ color: "#7ECFC4" }}>This is solvable.</strong>
             </p>
-            <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.85rem", color: "rgba(255,255,255,0.55)", letterSpacing: "0.05em" }}>— The Waypoint Thesis</div>
           </div>
         </FadeIn>
       </div>
@@ -390,72 +546,94 @@ function Features() {
   const features = [
     {
       num: "01", title: "Live Capacity Sync",
-      body: "A booking made on FareHarbor removes that slot from walk-in availability in Square instantly. No double booking. No manual refresh. No phone calls between staff.",
+      short: "Booking made online → walk-in slot gone instantly",
+      body: "A booking on FareHarbor removes that slot from walk-in availability in Square instantly. No double booking. No manual refresh. No phone calls between staff.",
       detail: "Sub-second sync via webhook architecture. If connectivity drops, Waypoint queues the update locally and syncs the moment signal returns.",
-      color: "#2A7D6F",
+      color: "#2A7D6F", icon: "🔄", solves: "Ghost Booking",
     },
     {
       num: "02", title: "Waiver-Triggered Payment",
+      short: "Pay button stays locked until every waiver is signed",
       body: "The Pay button doesn't turn green until every member of the party has a signed waiver linked to their booking. The waiver and the transaction are the same workflow.",
       detail: "Powered by Smartwaiver's certified legal infrastructure. Chain of custody maintained. Exportable for insurance or litigation on demand.",
-      color: "#1B3A5C",
+      color: "#6B4C9A", icon: "🔐", solves: "Waiver Scramble",
     },
     {
       num: "03", title: "Single Payment, Split Data",
-      body: "One customer swipe. Waypoint routes the tour revenue to FareHarbor, the retail revenue to Square, and the tip to the specific guide listed on the booking.",
+      short: "One swipe. Tour + retail + food + tip, all routed correctly",
+      body: "One customer swipe. Waypoint routes tour revenue to FareHarbor, retail revenue to Square, and the tip to the specific guide on the booking.",
       detail: "Tip attribution by guide is automatic. No end-of-night manual splitting. Your guides get paid correctly, every time.",
-      color: "#C2622D",
+      color: "#C2622D", icon: "⚡", solves: "Double Transaction",
     },
     {
-      num: "04", title: "Operator Intelligence Dashboard",
-      body: "Not just revenue totals. Singles vs. tandem kayak bookings by week. Retail attachment rate per tour type. Food revenue per visitor. The data that drives real decisions.",
-      detail: "Informs equipment purchasing, staffing levels, and inventory ordering. The report your accountant has been asking for since you opened.",
-      color: "#2A7D6F",
+      num: "04", title: "Operator Intelligence",
+      short: "The report your accountant has been asking for",
+      body: "Not just revenue totals. Equipment utilization by type. Retail attachment rate per activity. Revenue per visitor. The data that drives real decisions.",
+      detail: "Informs equipment purchasing, staffing levels, and inventory ordering — replacing gut-feel decisions with actual numbers.",
+      color: "#1B3A5C", icon: "📊", solves: "Ordering Blindspot",
     },
     {
       num: "05", title: "Real Inventory Tracking",
-      body: "Stock entered once, depleted across all sales channels simultaneously. Shrinkage flagged. Low stock alerted. Retail data tied to tour data.",
+      short: "Stock depleted across all channels simultaneously",
+      body: "Stock entered once, depleted across all sales channels simultaneously. Shrinkage flagged. Low stock alerted. Retail data tied to activity data.",
       detail: "Solves Square's known weakness on inventory depth. Works with both Square and Lightspeed depending on your retail complexity.",
-      color: "#1B3A5C",
+      color: "#2A7D6F", icon: "📦", solves: "Ordering Blindspot",
     },
     {
       num: "06", title: "Offline Queue",
-      body: "Dockside Wi-Fi dies on your busiest Saturday. Waypoint caches every transaction locally and syncs the moment connectivity returns. Nothing is lost.",
-      detail: "Enterprise-grade resilience. This is the feature that separates a prototype from production software.",
-      color: "#C2622D",
+      short: "Wi-Fi dies. Nothing is lost.",
+      body: "Your busiest Saturday and the Wi-Fi dies. Waypoint caches every transaction locally and syncs the moment connectivity returns. Nothing is lost.",
+      detail: "Enterprise-grade resilience. This is the feature that separates a real product from a prototype.",
+      color: "#C2622D", icon: "📡", solves: "Connectivity",
     },
     {
       num: "07", title: "Multi-Location Management",
-      body: "Built for concessionaires operating across multiple park locations under one entity. One login. One report. All locations. Compare performance across sites.",
+      short: "One login. All locations. One report.",
+      body: "Built for operators running multiple park or recreation sites under one entity. Compare performance across locations. One login. One report.",
       detail: "National and state park concessionaires are the fastest-growing segment of this market. Waypoint is built for them from day one.",
-      color: "#2A7D6F",
+      color: "#1B3A5C", icon: "🗺️", solves: "Scale",
     },
   ];
 
   return (
-    <section id="features" className="wp-section" style={{ background: "#F4F1EB" }}>
+    <section id="features" className="wp-section" style={{ background: "white" }}>
       <div className="container">
         <FadeIn>
           <div className="wp-eyebrow" style={{ marginBottom: "1rem" }}>Seven Core Capabilities</div>
           <div className="teal-rule" />
           <h2 style={{ fontSize: "clamp(2rem, 4vw, 3rem)", maxWidth: 640, marginBottom: "1rem", lineHeight: 1.2 }}>
-            Built around every problem operators actually have.
+            Every feature exists because an operator asked for it.
           </h2>
           <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "1rem", color: "#5A6B7A", maxWidth: 580, lineHeight: 1.7, marginBottom: "3.5rem" }}>
-            Not features invented in a conference room. Features reverse-engineered from the exact friction points that make outdoor recreation operations hard to run.
+            Not invented in a conference room. Reverse-engineered from the exact friction points that make parks and recreation operations hard to run.
           </p>
         </FadeIn>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "1.5rem" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "1.25rem" }}>
           {features.map((f, i) => (
-            <FadeIn key={f.num} delay={i * 60}>
-              <div className="wp-card" style={{ padding: "2rem", height: "100%", borderTop: `3px solid ${f.color}` }}>
+            <FadeIn key={f.num} delay={i * 55}>
+              <div style={{
+                background: "#FAFAF8", border: "1px solid #E8E4DC",
+                borderRadius: "0.75rem", padding: "1.75rem",
+                borderTop: `3px solid ${f.color}`,
+                height: "100%", display: "flex", flexDirection: "column",
+                transition: "transform 0.2s ease, box-shadow 0.2s ease",
+              }}
+                onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-3px)"; e.currentTarget.style.boxShadow = "0 8px 32px rgba(27,58,92,0.1)"; }}
+                onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}
+              >
+                {/* Icon + number row */}
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "1rem" }}>
-                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.68rem", fontWeight: 600, color: f.color, letterSpacing: "0.1em" }}>{f.num}</div>
+                  <div style={{ width: 44, height: 44, borderRadius: "0.5rem", background: `${f.color}14`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.3rem" }}>{f.icon}</div>
+                  <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "0.25rem" }}>
+                    <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.65rem", fontWeight: 600, color: f.color, letterSpacing: "0.1em" }}>{f.num}</span>
+                    <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.65rem", color: "#5A6B7A", background: "#F4F1EB", padding: "0.15rem 0.5rem", borderRadius: "1rem" }}>Fixes: {f.solves}</span>
+                  </div>
                 </div>
-                <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.15rem", color: "#1B3A5C", marginBottom: "0.75rem", fontWeight: 600 }}>{f.title}</h3>
-                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.9rem", color: "#3A4A5A", lineHeight: 1.7, marginBottom: "1rem" }}>{f.body}</p>
-                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.82rem", color: "#5A6B7A", lineHeight: 1.6, paddingTop: "1rem", borderTop: "1px solid #E8E4DC" }}>{f.detail}</p>
+                <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.1rem", color: "#1B3A5C", marginBottom: "0.4rem", fontWeight: 700 }}>{f.title}</h3>
+                <div style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 600, fontSize: "0.78rem", color: f.color, marginBottom: "0.85rem", lineHeight: 1.4 }}>{f.short}</div>
+                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.88rem", color: "#3A4A5A", lineHeight: 1.7, flex: 1 }}>{f.body}</p>
+                <div style={{ marginTop: "1rem", paddingTop: "1rem", borderTop: "1px solid #E8E4DC", fontFamily: "'DM Sans', sans-serif", fontSize: "0.78rem", color: "#5A6B7A", lineHeight: 1.6 }}>{f.detail}</div>
               </div>
             </FadeIn>
           ))}
@@ -515,14 +693,14 @@ function Dashboard() {
 // ─── Who It's For ─────────────────────────────────────────────────────────────
 function WhoItsFor() {
   const segments = [
-    { icon: "🦇", title: "Cave & Cavern Tours", desc: "Timed slots, strict capacity, waivers for every visitor, retail at the exit. This is exactly who Waypoint was built for." },
-    { icon: "🚣", title: "Kayak & Canoe Outfitters", desc: "Singles vs. tandem data drives your fleet purchasing. Live capacity sync prevents the double-booked launch." },
-    { icon: "🌊", title: "Whitewater Rafting", desc: "Guide tip attribution, waiver enforcement, multi-guide scheduling. One transaction for the full experience." },
-    { icon: "🌲", title: "Zipline & Aerial Parks", desc: "Weight and age restrictions enforced at booking. Waivers blocked until signed. Retail at the photo kiosk." },
-    { icon: "🏔️", title: "National Park Concessionaires", desc: "Multi-location management built in. One report across all sites. The market that's been waiting for this." },
-    { icon: "🌿", title: "State Park Concessionaires", desc: "Same compliance requirements as national parks. Same fragmented software problem. Same solution." },
-    { icon: "🧗", title: "Climbing Gyms with Retail", desc: "Day passes, gear rental, retail, food — all in one transaction. Membership sync with booking capacity." },
-    { icon: "🏕️", title: "Multi-Activity Outdoor Resorts", desc: "The most complex use case. Multiple activity types, multiple revenue centers, one unified operation." },
+        { icon: "🏞️", title: "Parks & Recreation Operators", desc: "Timed activities, capacity management, waivers, retail, and food — all under one roof. The exact multi-system problem Waypoint was built to solve." },
+    { icon: "🚣", title: "Water Sports & Rentals", desc: "Fleet utilization data drives purchasing decisions. Live capacity sync prevents the double-booked launch. Guide tip attribution handled automatically." },
+    { icon: "🌊", title: "Adventure & Guided Tours", desc: "Waiver enforcement, multi-guide scheduling, and retail at the end of the experience — one transaction for the full day." },
+    { icon: "🌲", title: "Aerial & Zip Adventures", desc: "Participant restrictions enforced at booking. Waivers locked until signed. Retail and photo packages attached to the same checkout." },
+    { icon: "🏔️", title: "National Park Concessionaires", desc: "Multi-location management built in from day one. One report across all sites. The market that's been waiting for this product." },
+    { icon: "🌿", title: "State Park Concessionaires", desc: "State compliance requirements vary by jurisdiction. Waypoint's waiver and reporting architecture is built to handle them without custom work." },
+    { icon: "🧗", title: "Multi-Activity Venues", desc: "Day passes, gear rental, retail, food — all in one transaction. Any combination of activity types, one unified operation." },
+    { icon: "🏕️", title: "Outdoor Resorts & Lodges", desc: "The most complex use case. Multiple activity types, multiple revenue centers, lodging, and retail — one system that knows all of it." },
   ];
   return (
     <section className="wp-section" style={{ background: "white" }}>
@@ -531,10 +709,10 @@ function WhoItsFor() {
           <div className="wp-eyebrow" style={{ marginBottom: "1rem" }}>Who It's For</div>
           <div className="teal-rule" />
           <h2 style={{ fontSize: "clamp(2rem, 4vw, 3rem)", maxWidth: 640, marginBottom: "1rem", lineHeight: 1.2 }}>
-            If you run tours and sell things, this was built for you.
+            If you manage activities and sell things, this was built for you.
           </h2>
           <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "1rem", color: "#5A6B7A", maxWidth: 580, lineHeight: 1.7, marginBottom: "3.5rem" }}>
-            The operators who need Waypoint most are the ones who've already tried everything else and found it wanting.
+            Any operator running timed activities alongside retail, food, or rentals — and using more than one system to do it — is the exact customer Waypoint was designed for.
           </p>
         </FadeIn>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "1.25rem" }}>
@@ -960,10 +1138,10 @@ export default function Home() {
     <div style={{ fontFamily: "'DM Sans', sans-serif" }}>
       <Nav />
       <Hero />
+      <Dashboard />
       <Problem />
       <HowItWorks />
       <Features />
-      <Dashboard />
       <WhoItsFor />
       <Pricing />
       <Compliance />
