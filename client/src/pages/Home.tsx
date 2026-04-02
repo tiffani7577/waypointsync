@@ -158,6 +158,18 @@ function Hero() {
             >
               Request Early Access →
             </a>
+            <a href="/dashboard" style={{
+              background: "rgba(255,255,255,0.15)", color: "white",
+              fontFamily: "'DM Sans', sans-serif", fontWeight: 600, fontSize: "0.95rem",
+              padding: "0.9rem 2rem", borderRadius: "0.375rem", textDecoration: "none",
+              border: "1px solid rgba(255,255,255,0.35)", transition: "all 0.2s ease",
+              display: "inline-flex", alignItems: "center", gap: "0.5rem",
+            }}
+              onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.25)"; }}
+              onMouseLeave={e => { e.currentTarget.style.background = "rgba(255,255,255,0.15)"; }}
+            >
+              ⬡ Live Demo
+            </a>
             <a href="#how" style={{
               background: "rgba(255,255,255,0.12)", color: "white",
               fontFamily: "'DM Sans', sans-serif", fontWeight: 500, fontSize: "0.95rem",
