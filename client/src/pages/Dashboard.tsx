@@ -277,7 +277,7 @@ function Sidebar({ view, setView }: { view: View; setView: (v: View) => void }) 
       {/* Location selector */}
       <div style={{ padding: "0.75rem 1rem", margin: "0.75rem 0.75rem 0", background: "rgba(255,255,255,0.06)", borderRadius: "0.5rem" }}>
         <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.68rem", color: "rgba(255,255,255,0.4)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "0.3rem" }}>Location</div>
-        <div style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 600, fontSize: "0.88rem", color: "white" }}>Silver Springs, FL</div>
+        <div style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 600, fontSize: "0.88rem", color: "white" }}>Riverside Park, FL</div>
         <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", marginTop: "0.25rem" }}>
           <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#2A7D6F" }} />
           <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.72rem", color: "rgba(255,255,255,0.5)" }}>All systems live</span>
@@ -315,7 +315,7 @@ function Sidebar({ view, setView }: { view: View; setView: (v: View) => void }) 
       {/* Bottom */}
       <div style={{ padding: "1rem 1.25rem", borderTop: "1px solid rgba(255,255,255,0.08)" }}>
         <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.72rem", color: "rgba(255,255,255,0.3)" }}>
-          Demo Mode · Cape Leisure Corp
+          Demo Mode · Operator Preview
         </div>
         <a href="/" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.75rem", color: "rgba(126,207,196,0.7)", textDecoration: "none", display: "block", marginTop: "0.4rem" }}>
           ← Back to site
@@ -476,7 +476,7 @@ function InventoryView({ data }: { data: ReturnType<typeof useLiveData> }) {
   return (
     <div style={{ background: "white", border: "1px solid #E8E4DC", borderRadius: "0.75rem", overflow: "hidden" }}>
       <div style={{ padding: "1.25rem 1.5rem", borderBottom: "1px solid #F4F1EB" }}>
-        <div style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: "0.9rem", color: "#1B3A5C" }}>Live Inventory — Silver Springs</div>
+        <div style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: "0.9rem", color: "#1B3A5C" }}>Live Inventory — Riverside Park</div>
         <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.78rem", color: "#5A6B7A", marginTop: "0.25rem" }}>Synced from Square + Lightspeed in real time</div>
       </div>
       <div style={{ display: "flex", flexDirection: "column" }}>
@@ -638,7 +638,7 @@ export default function Dashboard() {
   const data = useLiveData();
 
   const viewTitles: Record<View, { title: string; sub: string }> = {
-    overview: { title: "Good morning, Cape Leisure.", sub: "Here's what's happening at Silver Springs right now." },
+    overview: { title: "Good morning.", sub: "Here's what's happening across your locations right now." },
     connections: { title: "System Connections", sub: "Every system talking through Waypoint, live." },
     bookings: { title: "Today's Bookings", sub: `${data.bookingsToday} bookings · ${data.waivers.pending} waivers pending` },
     inventory: { title: "Live Inventory", sub: "Synced from Square + Lightspeed in real time." },
