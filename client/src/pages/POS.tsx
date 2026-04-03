@@ -11,9 +11,18 @@ import { useCart } from "@/contexts/CartContext";
 import { MOCK_BOOKINGS, MOCK_PRODUCTS, type Product } from "@/lib/mockData";
 import type { Booking } from "@/contexts/CartContext";
 import { toast } from "sonner";
+import PINScreen from "./PINScreen";
 
 const NAV_BLUE = "#1B3A5C";
 const TEAL = "#2A7D6F";
+
+// Staff session stored in sessionStorage so refresh keeps you logged in
+function getSession() {
+  try { return JSON.parse(sessionStorage.getItem("wp_staff") || "null"); } catch { return null; }
+}
+function setSession(name: string, role: string) {
+  sessionStorage.setItem("wp_staff", JSON.stringify({ name, role }));
+}
 
 function WaiverBadge({ signed, count, partySize }: { signed: boolean; count: number; partySize: number }) {
   if (signed) {
@@ -90,6 +99,18 @@ export default function POS() {
   const [productTab, setProductTab] = useState<Tab>("retail");
   const [showBookingSearch, setShowBookingSearch] = useState(!cart.booking);
   const [checkoutStep, setCheckoutStep] = useState<"cart" | "payment" | "complete">("cart");
+  const [staff, setStaff] = useState<{ name: string; role: string } | null>(getSession);
+
+  if (!staff) {
+    return (
+      <PINScreen
+        onUnlock={(name, role) => {
+          setSession(name, role);
+          setStaff({ name, role });
+        }}
+      />
+    );
+  }
 
   const filteredBookings = useMemo(() => {
     if (!search.trim()) return MOCK_BOOKINGS;
@@ -113,6 +134,10 @@ export default function POS() {
     addItem({ id: product.id, name: product.name, price: product.price, type: product.category });
     toast.success(`Added ${product.name}`);
   };
+
+  const [tipPercent, setTipPercent] = useState<number | null>(null);
+  const tipAmount = tipPercent !== null ? (subtotal * tipPercent) / 100 : 0;
+  const grandTotal = total + tipAmount;
 
   const handleCharge = () => {
     if (!cart.booking?.waiverSigned) {
@@ -150,7 +175,12 @@ export default function POS() {
             {" · "}
             {new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}
           </span>
-          <span className="text-xs px-2 py-0.5 rounded-full bg-teal-700 text-teal-100 font-medium">Staff: Alex</span>
+          <span className="text-xs px-2 py-0.5 rounded-full bg-teal-700 text-teal-100 font-medium">Staff: {staff.name}{staff.role === "Manager" ? " · MGR" : ""}</span>
+          <button
+            onClick={() => { sessionStorage.removeItem("wp_staff"); setStaff(null); }}
+            className="text-xs px-2 py-0.5 rounded bg-slate-700 text-slate-300 hover:bg-red-800 hover:text-white transition-colors"
+            title="Lock POS"
+          >🔒 Lock</button>
           <a href="/display" target="_blank" className="text-xs px-2 py-0.5 rounded bg-slate-700 text-slate-200 hover:bg-slate-600 transition-colors">
             Open Display ↗
           </a>
@@ -305,18 +335,46 @@ export default function POS() {
                     <span>${tax.toFixed(2)}</span>
                   </div>
                 )}
-                <div className="flex justify-between font-bold text-slate-800 pt-1 border-t border-slate-100">
-                  <span>Total</span>
-                  <span className="text-lg">${total.toFixed(2)}</span>
+              {/* Tip selection */}
+              {(cart.items.length > 0 || (cart.booking && cart.booking.balanceDue > 0)) && (
+                <div className="pt-2 border-t border-slate-100">
+                  <p className="text-xs text-slate-400 mb-1.5">Add tip for guide</p>
+                  <div className="flex gap-1.5">
+                    {[0, 10, 15, 20].map(pct => (
+                      <button
+                        key={pct}
+                        onClick={() => setTipPercent(tipPercent === pct ? null : pct)}
+                        className="flex-1 py-1 rounded text-xs font-semibold transition-colors"
+                        style={{
+                          background: tipPercent === pct ? NAV_BLUE : "#F4F1EB",
+                          color: tipPercent === pct ? "white" : "#5A6B7A",
+                          border: `1px solid ${tipPercent === pct ? NAV_BLUE : "#E8E4DC"}`,
+                        }}
+                      >
+                        {pct === 0 ? "No tip" : `${pct}%`}
+                      </button>
+                    ))}
+                  </div>
+                  {tipAmount > 0 && (
+                    <div className="flex justify-between text-xs text-slate-500 mt-1">
+                      <span>Tip ({tipPercent}%)</span>
+                      <span>+${tipAmount.toFixed(2)}</span>
+                    </div>
+                  )}
                 </div>
+              )}
+              <div className="flex justify-between font-bold text-slate-800 pt-1 border-t border-slate-100">
+                <span>Total</span>
+                <span className="text-lg">${grandTotal.toFixed(2)}</span>
+              </div>
               </div>
               <button
                 onClick={handleCharge}
-                disabled={total === 0}
-                className="w-full py-3 rounded-xl font-bold text-white text-base transition-all disabled:opacity-40 disabled:cursor-not-allowed"
-                style={{ background: total > 0 ? NAV_BLUE : undefined }}
-              >
-                Charge ${total.toFixed(2)}
+                disabled={grandTotal === 0}
+              className="w-full py-3 rounded-xl font-bold text-white text-base transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                style={{ background: grandTotal > 0 ? NAV_BLUE : undefined }}
+            >
+                Charge ${grandTotal.toFixed(2)}
               </button>
               {!cart.booking?.waiverSigned && cart.booking && (
                 <p className="text-xs text-red-500 text-center mt-1">⚠ Waiver required before checkout</p>
@@ -348,6 +406,13 @@ export default function POS() {
             >
               Food & Beverage
             </button>
+            <span className="ml-auto flex items-center gap-1.5">
+              <span className="text-xs text-slate-400">via</span>
+              <span className="text-xs font-semibold px-2 py-0.5 rounded" style={{ background: productTab === "food" ? "#00A88E22" : "#1B3A5C22", color: productTab === "food" ? "#00856F" : NAV_BLUE }}>
+                {productTab === "food" ? "Square" : "Lightspeed"}
+              </span>
+              <span className="w-2 h-2 rounded-full bg-emerald-400" title="Connected" />
+            </span>
           </div>
 
           <div className="flex-1 overflow-y-auto p-4">

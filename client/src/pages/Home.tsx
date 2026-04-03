@@ -193,7 +193,7 @@ function Hero() {
           {[
             { num: "750", label: "Visitors / day, one system" },
             { num: "3%", label: "Booking fee eliminated" },
-            { num: "5", label: "Disconnected systems unified" },
+            { num: "4", label: "Disconnected systems unified" },
             { num: "2 yr", label: "Waiver retention, automated" },
           ].map(s => (
             <div key={s.num}>
@@ -532,7 +532,7 @@ function HowItWorks() {
           <div style={{ marginTop: "3rem", padding: "1.5rem 2rem", background: "#F4F1EB", borderLeft: "4px solid #2A7D6F", borderRadius: "0 0.5rem 0.5rem 0" }}>
             <div style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 600, fontSize: "0.85rem", color: "#1B3A5C", marginBottom: "0.4rem" }}>How the money works</div>
             <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.88rem", color: "#5A6B7A", lineHeight: 1.7 }}>
-              Waypoint doesn't merge payment processors — it merges the <em>interface</em>. Your staff sees one screen. The customer swipes once. Behind the scenes, Waypoint routes the transaction to the correct system — FareHarbor for the booking, Lightspeed for retail, Stripe for payment processing. Your accounting in Sage stays clean. No audit nightmare, no Merchant of Record complexity.
+              Waypoint doesn't merge payment processors — it merges the <em>interface</em>. Your staff sees one screen. The customer swipes once. Behind the scenes, Waypoint routes the transaction to the correct system — FareHarbor for the booking, Lightspeed for retail, Square for food and beverage. Your accounting in Sage stays clean. No audit nightmare, no Merchant of Record complexity.
             </p>
           </div>
         </FadeIn>
@@ -547,7 +547,7 @@ function Features() {
     {
       num: "01", title: "Live Capacity Sync",
       short: "Booking made online → walk-in slot gone instantly",
-      body: "A booking on FareHarbor removes that slot from walk-in availability in Square instantly. No double booking. No manual refresh. No phone calls between staff.",
+      body: "A booking on FareHarbor removes that slot from walk-in availability instantly — across the staff POS and any walk-in queue. No double booking. No manual refresh. No phone calls between staff.",
       detail: "Sub-second sync via webhook architecture. If connectivity drops, Waypoint queues the update locally and syncs the moment signal returns.",
       color: "#2A7D6F", icon: "🔄", solves: "Ghost Booking",
     },
@@ -562,7 +562,7 @@ function Features() {
       num: "03", title: "Single Screen, Single Swipe",
       short: "One screen. Tour + retail + food + tip, all routed correctly",
       body: "Your staff sees one screen. The customer swipes once. Behind the scenes, Waypoint routes tour revenue to FareHarbor, retail to Lightspeed, and tip attribution to the specific guide — all in real time.",
-      detail: "Tip attribution by guide is automatic. No end-of-night manual splitting. Your guides get paid correctly, every time.",
+      detail: "Tip attribution by guide is automatic on Summit and above. No end-of-night manual splitting. Your guides get paid correctly, every time.",
       color: "#C2622D", icon: "⚡", solves: "Double Transaction",
     },
     {
