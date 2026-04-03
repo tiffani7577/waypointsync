@@ -144,7 +144,7 @@ function Hero() {
             fontSize: "clamp(1rem, 2vw, 1.2rem)", color: "rgba(255,255,255,0.82)",
             maxWidth: 580, lineHeight: 1.7, marginBottom: "2.5rem",
           }}>
-            Waypoint is the operating layer that connects FareHarbor, Square, Lightspeed, and your waiver platform — so your staff runs one transaction, your inventory stays honest, and you finally get the report that tells you what's actually happening.
+            Waypoint is the operating layer that connects FareHarbor, Lightspeed, Smartwaiver, and Sage — so your staff runs one transaction on one screen, your inventory stays honest, and you finally get the report that tells you what's actually happening.
           </p>
           <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
             <a href="#access" style={{
@@ -469,9 +469,9 @@ function HowItWorks() {
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "1rem" }}>
               {[
                 { name: "FareHarbor", role: "Online bookings, tour capacity, time slots", color: "#1B3A5C" },
-                { name: "Square", role: "In-person POS, food service, retail checkout", color: "#2A7D6F" },
-                { name: "Lightspeed", role: "Advanced retail inventory management", color: "#C2622D" },
-                { name: "Smartwaiver", role: "Digital waiver collection & legal storage", color: "#5A6B7A" },
+                { name: "Lightspeed", role: "In-person POS, food service, retail checkout", color: "#2A7D6F" },
+                { name: "Smartwaiver", role: "Digital waiver collection & legal storage", color: "#C2622D" },
+                { name: "Sage", role: "Accounting, payroll, and financial reporting", color: "#5A6B7A" },
               ].map(s => (
                 <div key={s.name} style={{ background: "#F4F1EB", border: `2px solid ${s.color}22`, borderRadius: "0.75rem", padding: "1.25rem", textAlign: "center" }}>
                   <div style={{ width: 10, height: 10, borderRadius: "50%", background: s.color, margin: "0 auto 0.75rem" }} />
@@ -532,7 +532,7 @@ function HowItWorks() {
           <div style={{ marginTop: "3rem", padding: "1.5rem 2rem", background: "#F4F1EB", borderLeft: "4px solid #2A7D6F", borderRadius: "0 0.5rem 0.5rem 0" }}>
             <div style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 600, fontSize: "0.85rem", color: "#1B3A5C", marginBottom: "0.4rem" }}>How the money works</div>
             <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.88rem", color: "#5A6B7A", lineHeight: 1.7 }}>
-              Waypoint doesn't merge payment processors — it merges the <em>interface</em>. When a customer pays, Waypoint triggers the correct API call to each processor simultaneously. The customer sees one total and swipes once. Your accounting stays clean. No audit nightmare, no Merchant of Record complexity.
+              Waypoint doesn't merge payment processors — it merges the <em>interface</em>. Your staff sees one screen. The customer swipes once. Behind the scenes, Waypoint routes the transaction to the correct system — FareHarbor for the booking, Lightspeed for retail, Stripe for payment processing. Your accounting in Sage stays clean. No audit nightmare, no Merchant of Record complexity.
             </p>
           </div>
         </FadeIn>
@@ -559,24 +559,24 @@ function Features() {
       color: "#6B4C9A", icon: "🔐", solves: "Waiver Scramble",
     },
     {
-      num: "03", title: "Single Payment, Split Data",
-      short: "One swipe. Tour + retail + food + tip, all routed correctly",
-      body: "One customer swipe. Waypoint routes tour revenue to FareHarbor, retail revenue to Square, and the tip to the specific guide on the booking.",
+      num: "03", title: "Single Screen, Single Swipe",
+      short: "One screen. Tour + retail + food + tip, all routed correctly",
+      body: "Your staff sees one screen. The customer swipes once. Behind the scenes, Waypoint routes tour revenue to FareHarbor, retail to Lightspeed, and tip attribution to the specific guide — all in real time.",
       detail: "Tip attribution by guide is automatic. No end-of-night manual splitting. Your guides get paid correctly, every time.",
       color: "#C2622D", icon: "⚡", solves: "Double Transaction",
     },
     {
       num: "04", title: "Operator Intelligence",
-      short: "The report your accountant has been asking for",
-      body: "Not just revenue totals. Equipment utilization by type. Retail attachment rate per activity. Revenue per visitor. The data that drives real decisions.",
-      detail: "Informs equipment purchasing, staffing levels, and inventory ordering — replacing gut-feel decisions with actual numbers.",
+      short: "The report that replaces your nightly spreadsheet",
+      body: "Every morning, your daily report is waiting — already pulled from FareHarbor, Lightspeed, and Smartwaiver, formatted and pushed to Sage. No manual reconciliation. No Excel. No 2 AM spreadsheet.",
+      detail: "Replaces the manual process of pulling from multiple systems into Excel and then into Sage. Revenue per visitor, retail attach rate, guide performance — all automated.",
       color: "#1B3A5C", icon: "📊", solves: "Ordering Blindspot",
     },
     {
       num: "05", title: "Real Inventory Tracking",
       short: "Stock depleted across all channels simultaneously",
-      body: "Stock entered once, depleted across all sales channels simultaneously. Shrinkage flagged. Low stock alerted. Retail data tied to activity data.",
-      detail: "Solves Square's known weakness on inventory depth. Works with both Square and Lightspeed depending on your retail complexity.",
+      body: "Stock entered once in Lightspeed, depleted across all sales channels simultaneously. Shrinkage flagged. Low stock alerted. Retail data tied to activity data for real purchasing decisions.",
+      detail: "Lightspeed's inventory depth is best-in-class for retail. Waypoint makes sure it talks to your booking and food systems in real time.",
       color: "#2A7D6F", icon: "📦", solves: "Ordering Blindspot",
     },
     {
@@ -740,7 +740,7 @@ function Pricing() {
       period: "/month",
       desc: "Single location. All core integrations. Up to 500 bookings/month.",
       features: [
-        "FareHarbor + Square integration",
+        "FareHarbor + Lightspeed integration",
         "Live capacity sync",
         "Waiver-triggered payment",
         "Unified daily report",
@@ -873,7 +873,7 @@ function Compliance() {
     {
       title: "PCI DSS",
       icon: "🔒",
-      body: "Waypoint never stores, transmits, or touches raw card data. Stripe and Square are both PCI Level 1 certified. Operators using Waypoint inherit that certification through our integration architecture. No additional PCI audit burden falls on you.",
+      body: "Waypoint never stores, transmits, or touches raw card data. Lightspeed and Stripe are both PCI Level 1 certified. Operators using Waypoint inherit that certification through our integration architecture. No additional PCI audit burden falls on you.",
     },
     {
       title: "Waiver Retention",
@@ -883,7 +883,7 @@ function Compliance() {
     {
       title: "POS Audit Compliance",
       icon: "🏛️",
-      body: "Waypoint is middleware, not a POS. Quarterly and annual audit obligations remain with Square and Lightspeed — the certified POS systems. Waypoint does not trigger additional audit requirements. Your existing compliance schedule stays intact.",
+      body: "Waypoint is middleware, not a POS. Quarterly and annual audit obligations remain with Lightspeed — the certified POS system. Waypoint does not trigger additional audit requirements. Your existing compliance schedule stays intact.",
     },
     {
       title: "Uptime & Data Integrity",
@@ -915,6 +915,82 @@ function Compliance() {
             </FadeIn>
           ))}
         </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── Comparison Table ────────────────────────────────────────────────────────
+function ComparisonTable() {
+  const rows = [
+    { feature: "Booking + POS unified", waypoint: true, fareharbor: "Partial", ingenuity: "Partial", legacy: false },
+    { feature: "Lightspeed retail integration", waypoint: true, fareharbor: false, ingenuity: "Glitchy", legacy: false },
+    { feature: "Waiver-triggered payment gate", waypoint: true, fareharbor: false, ingenuity: false, legacy: false },
+    { feature: "One screen for staff", waypoint: true, fareharbor: false, ingenuity: false, legacy: false },
+    { feature: "Automated daily report → Sage", waypoint: true, fareharbor: false, ingenuity: false, legacy: false },
+    { feature: "Flat monthly fee (no % per booking)", waypoint: true, fareharbor: false, ingenuity: true, legacy: true },
+    { feature: "Multi-location management", waypoint: true, fareharbor: "Limited", ingenuity: "Limited", legacy: false },
+    { feature: "Offline queue mode", waypoint: true, fareharbor: false, ingenuity: false, legacy: false },
+    { feature: "Tip attribution by guide", waypoint: true, fareharbor: false, ingenuity: false, legacy: false },
+    { feature: "Sage accounting sync", waypoint: true, fareharbor: false, ingenuity: false, legacy: false },
+  ];
+
+  const renderVal = (val: boolean | string, isWaypoint = false) => {
+    if (val === true) return <span style={{ color: isWaypoint ? "#2A7D6F" : "#2A7D6F", fontWeight: 700, fontSize: "1rem" }}>✓</span>;
+    if (val === false) return <span style={{ color: "#C2622D", fontWeight: 700, fontSize: "1rem" }}>✗</span>;
+    return <span style={{ color: "#C2622D", fontFamily: "'DM Sans', sans-serif", fontSize: "0.78rem", fontWeight: 600 }}>{val}</span>;
+  };
+
+  return (
+    <section className="wp-section" style={{ background: "#0D1F33", padding: "5rem 0" }}>
+      <div className="container">
+        <FadeIn>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1rem" }}>
+            <div style={{ width: 32, height: 2, background: "#2A7D6F" }} />
+            <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.72rem", fontWeight: 600, color: "#2A7D6F", letterSpacing: "0.15em", textTransform: "uppercase" }}>Competitive Landscape</span>
+          </div>
+          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(2rem, 4vw, 3rem)", color: "white", maxWidth: 680, marginBottom: "0.75rem", lineHeight: 1.2 }}>
+            How Waypoint compares to what's already out there.
+          </h2>
+          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "1rem", color: "rgba(255,255,255,0.5)", maxWidth: 560, lineHeight: 1.7, marginBottom: "3rem" }}>
+            FareHarbor is great at bookings. Ingenuity is close — but hasn't solved the retail piece. Legacy POS systems were never built for activity operators. Waypoint connects them all.
+          </p>
+        </FadeIn>
+
+        <FadeIn delay={100}>
+          <div style={{ overflowX: "auto" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse", fontFamily: "'DM Sans', sans-serif" }}>
+              <thead>
+                <tr>
+                  <th style={{ textAlign: "left", padding: "1rem 1.25rem", fontFamily: "'DM Sans', sans-serif", fontWeight: 600, fontSize: "0.78rem", color: "rgba(255,255,255,0.4)", letterSpacing: "0.08em", textTransform: "uppercase", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>Capability</th>
+                  <th style={{ textAlign: "center", padding: "1rem 1.25rem", fontFamily: "'Playfair Display', serif", fontWeight: 700, fontSize: "1rem", color: "#7ECFC4", borderBottom: "1px solid rgba(42,125,111,0.4)", background: "rgba(42,125,111,0.08)", borderRadius: "0.5rem 0.5rem 0 0" }}>Waypoint</th>
+                  <th style={{ textAlign: "center", padding: "1rem 1.25rem", fontFamily: "'DM Sans', sans-serif", fontWeight: 600, fontSize: "0.85rem", color: "rgba(255,255,255,0.55)", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>FareHarbor</th>
+                  <th style={{ textAlign: "center", padding: "1rem 1.25rem", fontFamily: "'DM Sans', sans-serif", fontWeight: 600, fontSize: "0.85rem", color: "rgba(255,255,255,0.55)", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>Ingenuity</th>
+                  <th style={{ textAlign: "center", padding: "1rem 1.25rem", fontFamily: "'DM Sans', sans-serif", fontWeight: 600, fontSize: "0.85rem", color: "rgba(255,255,255,0.55)", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>Legacy POS</th>
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map((row, i) => (
+                  <tr key={row.feature} style={{ background: i % 2 === 0 ? "rgba(255,255,255,0.02)" : "transparent" }}>
+                    <td style={{ padding: "0.85rem 1.25rem", fontFamily: "'DM Sans', sans-serif", fontSize: "0.88rem", color: "rgba(255,255,255,0.75)", borderBottom: "1px solid rgba(255,255,255,0.05)", fontWeight: 500 }}>{row.feature}</td>
+                    <td style={{ textAlign: "center", padding: "0.85rem 1.25rem", borderBottom: "1px solid rgba(255,255,255,0.05)", background: "rgba(42,125,111,0.06)" }}>{renderVal(row.waypoint, true)}</td>
+                    <td style={{ textAlign: "center", padding: "0.85rem 1.25rem", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>{renderVal(row.fareharbor)}</td>
+                    <td style={{ textAlign: "center", padding: "0.85rem 1.25rem", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>{renderVal(row.ingenuity)}</td>
+                    <td style={{ textAlign: "center", padding: "0.85rem 1.25rem", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>{renderVal(row.legacy)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </FadeIn>
+
+        <FadeIn delay={200}>
+          <div style={{ marginTop: "2rem", padding: "1.25rem 1.75rem", background: "rgba(42,125,111,0.1)", border: "1px solid rgba(42,125,111,0.2)", borderRadius: "0.75rem" }}>
+            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.88rem", color: "rgba(255,255,255,0.6)", lineHeight: 1.7, margin: 0 }}>
+              <strong style={{ color: "#7ECFC4" }}>On Ingenuity:</strong> The closest competitor. Strong on booking-POS bridging, but operators consistently report friction on the Lightspeed retail integration — particularly inventory depth and multi-location sync. That's the gap Waypoint was built to close.
+            </p>
+          </div>
+        </FadeIn>
       </div>
     </section>
   );
@@ -1000,8 +1076,11 @@ function EarlyAccess() {
               <div style={{ background: "rgba(42,125,111,0.15)", border: "1px solid rgba(42,125,111,0.4)", borderRadius: "1rem", padding: "3rem 2rem", textAlign: "center" }}>
                 <div style={{ fontSize: "2.5rem", marginBottom: "1rem" }}>✅</div>
                 <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.5rem", color: "white", marginBottom: "0.75rem" }}>You're on the list.</h3>
-                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.95rem", color: "rgba(255,255,255,0.65)", lineHeight: 1.7 }}>
+                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.88rem", color: "rgba(255,255,255,0.65)", lineHeight: 1.7 }}>
                   We'll reach out within 48 hours to learn more about your operation and get you set up for the beta. In the meantime, if you have questions, reply to our confirmation email.
+                </p>
+                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.82rem", color: "rgba(255,255,255,0.45)", lineHeight: 1.6, marginTop: "0.5rem" }}>
+                  Integrations supported: FareHarbor · Lightspeed · Smartwaiver · Sage · Stripe
                 </p>
               </div>
             </FadeIn>
@@ -1121,8 +1200,8 @@ function Footer() {
           </div>
           <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.8rem", color: "rgba(255,255,255,0.3)" }}>
             Built by{" "}
-            <a href="#" style={{ color: "rgba(126,207,196,0.7)", textDecoration: "none" }}>
-              [Your Name]
+            <a href="https://tiffani.dev" target="_blank" rel="noopener noreferrer" style={{ color: "rgba(126,207,196,0.7)", textDecoration: "none" }}>
+              Tiffani
             </a>
             {" "}· Case Study 001
           </div>
@@ -1146,6 +1225,7 @@ export default function Home() {
       <Pricing />
       <Compliance />
       <Origin />
+      <ComparisonTable />
       <EarlyAccess />
       <Footer />
     </div>

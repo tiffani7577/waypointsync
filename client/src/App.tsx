@@ -6,12 +6,19 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
+import POS from "./pages/POS";
+import CustomerDisplay from "./pages/CustomerDisplay";
+import DailyReport from "./pages/DailyReport";
+import { CartProvider } from "./contexts/CartContext";
 
 function Router() {
   return (
     <Switch>
       <Route path={"/"} component={Home} />
       <Route path={"/dashboard"} component={Dashboard} />
+      <Route path={"/pos"} component={POS} />
+      <Route path={"/display"} component={CustomerDisplay} />
+      <Route path={"/report"} component={DailyReport} />
       <Route path={"/404"} component={NotFound} />
       <Route component={NotFound} />
     </Switch>
@@ -22,10 +29,12 @@ function App() {
   return (
     <ErrorBoundary>
       <ThemeProvider defaultTheme="light">
-        <TooltipProvider>
-          <Toaster />
-          <Router />
-        </TooltipProvider>
+        <CartProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Router />
+          </TooltipProvider>
+        </CartProvider>
       </ThemeProvider>
     </ErrorBoundary>
   );
