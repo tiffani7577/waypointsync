@@ -97,6 +97,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       if (existing) {
         return {
           ...prev,
+          status: "active",
           items: prev.items.map(i =>
             i.id === item.id ? { ...i, quantity: i.quantity + (item.quantity ?? 1) } : i
           ),
@@ -104,6 +105,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       }
       return {
         ...prev,
+        status: "active",
         items: [...prev.items, { ...item, quantity: item.quantity ?? 1 }],
       };
     });

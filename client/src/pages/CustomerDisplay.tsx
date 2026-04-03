@@ -12,10 +12,11 @@ const NAV_BLUE = "#1B3A5C";
 const TEAL = "#2A7D6F";
 
 export default function CustomerDisplay() {
-  const { cart, subtotal, tax, total } = (() => {
-    const d = useDisplayCart();
-    return { cart: d, subtotal: d.subtotal, tax: d.tax, total: d.total };
-  })();
+  const displayState = useDisplayCart();
+  const cart = displayState;
+  const subtotal = displayState.subtotal;
+  const tax = displayState.tax;
+  const total = displayState.total;
 
   const allLineItems = [
     ...(cart.booking && cart.booking.balanceDue > 0
