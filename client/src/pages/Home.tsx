@@ -469,9 +469,10 @@ function HowItWorks() {
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "1rem" }}>
               {[
                 { name: "FareHarbor", role: "Online bookings, tour capacity, time slots", color: "#1B3A5C" },
-                { name: "Lightspeed", role: "In-person POS, food service, retail checkout", color: "#2A7D6F" },
+                { name: "Lightspeed", role: "In-person retail POS — gear, merchandise, souvenirs", color: "#2A7D6F" },
+                { name: "Square", role: "Food & beverage — concessions, snacks, drinks", color: "#00856F" },
                 { name: "Smartwaiver", role: "Digital waiver collection & legal storage", color: "#C2622D" },
-                { name: "Sage", role: "Accounting, payroll, and financial reporting", color: "#5A6B7A" },
+                { name: "Your Accounting System", role: "Sage, QuickBooks, or your existing platform", color: "#5A6B7A" },
               ].map(s => (
                 <div key={s.name} style={{ background: "#F4F1EB", border: `2px solid ${s.color}22`, borderRadius: "0.75rem", padding: "1.25rem", textAlign: "center" }}>
                   <div style={{ width: 10, height: 10, borderRadius: "50%", background: s.color, margin: "0 auto 0.75rem" }} />
@@ -532,7 +533,7 @@ function HowItWorks() {
           <div style={{ marginTop: "3rem", padding: "1.5rem 2rem", background: "#F4F1EB", borderLeft: "4px solid #2A7D6F", borderRadius: "0 0.5rem 0.5rem 0" }}>
             <div style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 600, fontSize: "0.85rem", color: "#1B3A5C", marginBottom: "0.4rem" }}>How the money works</div>
             <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.88rem", color: "#5A6B7A", lineHeight: 1.7 }}>
-              Waypoint doesn't merge payment processors — it merges the <em>interface</em>. Your staff sees one screen. The customer swipes once. Behind the scenes, Waypoint routes the transaction to the correct system — FareHarbor for the booking, Lightspeed for retail, Square for food and beverage. Your accounting in Sage stays clean. No audit nightmare, no Merchant of Record complexity.
+              Waypoint doesn't merge payment processors — it merges the <em>interface</em>. Your staff sees one screen. The customer swipes once. Behind the scenes, Waypoint routes the transaction to the correct system — FareHarbor for the booking, Lightspeed for retail, Square for food and beverage. Your accounting system stays clean. No audit nightmare, no Merchant of Record complexity.
             </p>
           </div>
         </FadeIn>
@@ -883,7 +884,12 @@ function Compliance() {
     {
       title: "POS Audit Compliance",
       icon: "🏛️",
-      body: "Waypoint is middleware, not a POS. Quarterly and annual audit obligations remain with Lightspeed — the certified POS system. Waypoint does not trigger additional audit requirements. Your existing compliance schedule stays intact.",
+      body: "Waypoint is middleware, not a POS. Quarterly and annual audit obligations remain with your certified POS system. Waypoint does not trigger additional audit requirements. Your existing compliance schedule stays intact — quarterly POS checks, annual state reviews, all unchanged.",
+    },
+    {
+      title: "Customer-Facing Display",
+      icon: "🖥️",
+      body: "DEP concession contracts and state park agreements often require a customer-facing display at point of sale. Waypoint's built-in display runs on any screen — iPad, Android tablet, or a second monitor. No proprietary hardware required. No Apple lock-in.",
     },
     {
       title: "Uptime & Data Integrity",
@@ -927,12 +933,13 @@ function ComparisonTable() {
     { feature: "Lightspeed retail integration", waypoint: true, fareharbor: false, ingenuity: "Limited", legacy: false },
     { feature: "Waiver-triggered payment gate", waypoint: true, fareharbor: false, ingenuity: false, legacy: false },
     { feature: "One screen for staff", waypoint: true, fareharbor: false, ingenuity: false, legacy: false },
-    { feature: "Automated daily report → Sage", waypoint: true, fareharbor: false, ingenuity: false, legacy: false },
+    { feature: "Automated daily report → accounting", waypoint: true, fareharbor: false, ingenuity: false, legacy: false },
+    { feature: "Runs on any device (not Apple-only)", waypoint: true, fareharbor: "N/A", ingenuity: false, legacy: "Varies" },
     { feature: "Flat monthly fee (no % per booking)", waypoint: true, fareharbor: false, ingenuity: true, legacy: true },
     { feature: "Multi-location management", waypoint: true, fareharbor: "Limited", ingenuity: "Limited", legacy: false },
     { feature: "Offline queue mode", waypoint: true, fareharbor: false, ingenuity: false, legacy: false },
     { feature: "Tip attribution by guide", waypoint: true, fareharbor: false, ingenuity: false, legacy: false },
-    { feature: "Sage accounting sync", waypoint: true, fareharbor: false, ingenuity: false, legacy: false },
+    { feature: "Accounting sync (Sage, QuickBooks, etc.)", waypoint: true, fareharbor: false, ingenuity: false, legacy: false },
   ];
 
   const renderVal = (val: boolean | string, isWaypoint = false) => {
@@ -953,7 +960,7 @@ function ComparisonTable() {
             How Waypoint compares to what's already out there.
           </h2>
           <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "1rem", color: "rgba(255,255,255,0.5)", maxWidth: 560, lineHeight: 1.7, marginBottom: "3rem" }}>
-            FareHarbor is great at bookings. Ingenuity is close — but hasn't solved the retail piece. Legacy POS systems were never built for activity operators. Waypoint connects them all.
+            FareHarbor is great at bookings. Ingenuity has solved food with Square — but the retail integration remains incomplete, and their platform is Apple-only. Legacy POS systems were never built for activity operators. Waypoint closes the gap.
           </p>
         </FadeIn>
 
@@ -987,7 +994,7 @@ function ComparisonTable() {
         <FadeIn delay={200}>
           <div style={{ marginTop: "2rem", padding: "1.25rem 1.75rem", background: "rgba(42,125,111,0.1)", border: "1px solid rgba(42,125,111,0.2)", borderRadius: "0.75rem" }}>
             <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.88rem", color: "rgba(255,255,255,0.6)", lineHeight: 1.7, margin: 0 }}>
-              <strong style={{ color: "#7ECFC4" }}>On Ingenuity:</strong> The closest competitor. Strong on booking-POS bridging, but operators consistently report friction on the Lightspeed retail integration — particularly inventory depth and multi-location sync. That's the gap Waypoint was built to close.
+              <strong style={{ color: "#7ECFC4" }}>On Ingenuity:</strong> The closest competitor. They've done real work — Square for food is solid. But the Lightspeed retail integration remains limited, and the platform is Apple-only, which means hardware costs stack up fast. Waypoint runs on any browser, any device, and closes the retail gap they haven't solved.
             </p>
           </div>
         </FadeIn>
