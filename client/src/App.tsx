@@ -10,8 +10,8 @@ import POS from "./pages/POS";
 import CustomerDisplay from "./pages/CustomerDisplay";
 import DailyReport from "./pages/DailyReport";
 import { CartProvider } from "./contexts/CartContext";
-
 function Router() {
+  // make sure to consider if you need authentication for certain routes
   return (
     <Switch>
       <Route path={"/"} component={Home} />

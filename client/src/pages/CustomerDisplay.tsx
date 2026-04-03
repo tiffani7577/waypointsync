@@ -1,18 +1,21 @@
 /**
  * WAYPOINTSYNC — Customer-Facing Display
- * Opens in a second browser tab/window on any screen facing the customer.
- * Syncs live with the staff POS via localStorage storage events.
+ * Opens on any screen facing the customer — any device, any network.
+ * Subscribes to /api/cart-stream (SSE) for live cross-device updates from the staff POS.
  * Satisfies Florida DEP concession contract requirement: "visual display which faces customers"
- * No FareHarbor needed. No Lightspeed needed. Just a URL on any screen.
+ * No login required. No FareHarbor tab. No Lightspeed tab. Just open the URL.
  */
 
-import { useCart } from "@/contexts/CartContext";
+import { useDisplayCart } from "@/contexts/CartContext";
 
 const NAV_BLUE = "#1B3A5C";
 const TEAL = "#2A7D6F";
 
 export default function CustomerDisplay() {
-  const { cart, subtotal, tax, total } = useCart();
+  const { cart, subtotal, tax, total } = (() => {
+    const d = useDisplayCart();
+    return { cart: d, subtotal: d.subtotal, tax: d.tax, total: d.total };
+  })();
 
   const allLineItems = [
     ...(cart.booking && cart.booking.balanceDue > 0
@@ -122,7 +125,6 @@ export default function CustomerDisplay() {
             <p className="text-white text-2xl font-semibold mb-2">Welcome</p>
             <p className="text-slate-400">Please see a staff member to begin your visit.</p>
             <p className="text-slate-500 text-xs mt-2">This display updates live as your transaction is built.</p>
-
           </div>
         )}
       </div>

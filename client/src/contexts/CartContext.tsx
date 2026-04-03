@@ -1,11 +1,11 @@
 /**
  * WAYPOINTSYNC — CartContext
  * Shared cart state between the staff POS screen and the customer-facing display.
- * In production this will sync via WebSocket. For demo, uses localStorage + storage events
- * so two browser tabs (staff tab + display tab) stay in sync in real time.
+ * POS writes to /api/cart-sync (POST) on every cart change.
+ * CustomerDisplay subscribes to /api/cart-stream (SSE) for live cross-device updates.
  */
 
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 
 export interface CartItem {
   id: string;
@@ -49,8 +49,6 @@ interface CartContextType {
   total: number;
 }
 
-const STORAGE_KEY = "waypointsync_cart";
-
 const defaultCart: CartState = {
   booking: null,
   items: [],
@@ -65,33 +63,29 @@ function generateTxId() {
 
 const CartContext = createContext<CartContextType | null>(null);
 
+// Push cart state to the server so all displays receive it
+function pushCartSync(cart: CartState) {
+  fetch("/api/cart-sync", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(cart),
+  }).catch(() => {/* silent — offline queue can be added later */});
+}
+
 export function CartProvider({ children }: { children: React.ReactNode }) {
-  const [cart, setCart] = useState<CartState>(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      return stored ? JSON.parse(stored) : { ...defaultCart, transactionId: generateTxId() };
-    } catch {
-      return { ...defaultCart, transactionId: generateTxId() };
-    }
+  const [cart, setCartState] = useState<CartState>({
+    ...defaultCart,
+    transactionId: generateTxId(),
   });
 
-  // Sync to localStorage whenever cart changes
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
-  }, [cart]);
-
-  // Listen for changes from other tabs (customer display)
-  useEffect(() => {
-    const handler = (e: StorageEvent) => {
-      if (e.key === STORAGE_KEY && e.newValue) {
-        try {
-          setCart(JSON.parse(e.newValue));
-        } catch {}
-      }
-    };
-    window.addEventListener("storage", handler);
-    return () => window.removeEventListener("storage", handler);
-  }, []);
+  // Wrap setState so every mutation also pushes to server
+  const setCart = (updater: CartState | ((prev: CartState) => CartState)) => {
+    setCartState(prev => {
+      const next = typeof updater === "function" ? updater(prev) : updater;
+      pushCartSync(next);
+      return next;
+    });
+  };
 
   const setBooking = (booking: Booking | null) => {
     setCart(prev => ({ ...prev, booking, status: booking ? "active" : "idle" }));
@@ -120,10 +114,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   };
 
   const updateQuantity = (id: string, qty: number) => {
-    if (qty <= 0) {
-      removeItem(id);
-      return;
-    }
+    if (qty <= 0) { removeItem(id); return; }
     setCart(prev => ({
       ...prev,
       items: prev.items.map(i => (i.id === id ? { ...i, quantity: qty } : i)),
@@ -157,4 +148,50 @@ export function useCart() {
   const ctx = useContext(CartContext);
   if (!ctx) throw new Error("useCart must be used within CartProvider");
   return ctx;
+}
+
+/**
+ * useDisplayCart — used ONLY by CustomerDisplay.
+ * Subscribes to the server SSE stream and returns the latest cart state.
+ * Works across any two devices on any network.
+ */
+export function useDisplayCart() {
+  const [cart, setCart] = useState<CartState & { subtotal: number; tax: number; total: number }>({
+    ...defaultCart,
+    transactionId: "",
+    subtotal: 0,
+    tax: 0,
+    total: 0,
+  });
+  const esRef = useRef<EventSource | null>(null);
+
+  useEffect(() => {
+    const connect = () => {
+      const es = new EventSource("/api/cart-stream");
+      esRef.current = es;
+
+      es.onmessage = (e) => {
+        try {
+          const state: CartState = JSON.parse(e.data);
+          const subtotal =
+            (state.booking?.balanceDue ?? 0) +
+            state.items.reduce((sum, i) => sum + i.price * i.quantity, 0);
+          const tax = parseFloat((state.items.reduce((sum, i) => sum + i.price * i.quantity, 0) * 0.07).toFixed(2));
+          const total = parseFloat((subtotal + tax).toFixed(2));
+          setCart({ ...state, subtotal, tax, total });
+        } catch {}
+      };
+
+      es.onerror = () => {
+        es.close();
+        // Reconnect after 3s
+        setTimeout(connect, 3000);
+      };
+    };
+
+    connect();
+    return () => { esRef.current?.close(); };
+  }, []);
+
+  return cart;
 }
