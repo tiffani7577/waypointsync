@@ -924,7 +924,7 @@ function Compliance() {
 function ComparisonTable() {
   const rows = [
     { feature: "Booking + POS unified", waypoint: true, fareharbor: "Partial", ingenuity: "Partial", legacy: false },
-    { feature: "Lightspeed retail integration", waypoint: true, fareharbor: false, ingenuity: "Glitchy", legacy: false },
+    { feature: "Lightspeed retail integration", waypoint: true, fareharbor: false, ingenuity: "Limited", legacy: false },
     { feature: "Waiver-triggered payment gate", waypoint: true, fareharbor: false, ingenuity: false, legacy: false },
     { feature: "One screen for staff", waypoint: true, fareharbor: false, ingenuity: false, legacy: false },
     { feature: "Automated daily report → Sage", waypoint: true, fareharbor: false, ingenuity: false, legacy: false },
