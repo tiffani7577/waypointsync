@@ -72,12 +72,18 @@ function ConnectionWeb() {
   const animRef = useRef<number>(0);
   const timeRef = useRef(0);
 
+  // Evenly space 5 nodes in a pentagon around the center (cx=0.5, cy=0.5)
+  // Angles: top=270°, then clockwise every 72°. Radius 0.36 of canvas size.
+  const r = 0.36;
+  const cx0 = 0.5;
+  const cy0 = 0.5;
+  const toRad = (deg: number) => (deg * Math.PI) / 180;
   const systems = [
-    { name: "FareHarbor", color: "#1B3A5C", icon: "📅", x: 0.18, y: 0.22, status: "live" },
-    { name: "Square POS", color: "#2A7D6F", icon: "💳", x: 0.82, y: 0.22, status: "live" },
-    { name: "Lightspeed", color: "#C2622D", icon: "📦", x: 0.82, y: 0.78, status: "live" },
-    { name: "Smartwaiver", color: "#6B4C9A", icon: "✍️", x: 0.18, y: 0.78, status: "live" },
-    { name: "Stripe", color: "#5A6B7A", icon: "⚡", x: 0.50, y: 0.08, status: "live" },
+    { name: "FareHarbor",  color: "#1B3A5C", icon: "📅", x: cx0 + r * Math.cos(toRad(270)),       y: cy0 + r * Math.sin(toRad(270)),       status: "live" },
+    { name: "Square POS", color: "#2A7D6F", icon: "💳", x: cx0 + r * Math.cos(toRad(270 + 72)),   y: cy0 + r * Math.sin(toRad(270 + 72)),   status: "live" },
+    { name: "Lightspeed", color: "#C2622D", icon: "📦", x: cx0 + r * Math.cos(toRad(270 + 144)),  y: cy0 + r * Math.sin(toRad(270 + 144)),  status: "live" },
+    { name: "Smartwaiver",color: "#6B4C9A", icon: "✍️", x: cx0 + r * Math.cos(toRad(270 + 216)),  y: cy0 + r * Math.sin(toRad(270 + 216)),  status: "live" },
+    { name: "Stripe",     color: "#5A6B7A", icon: "⚡", x: cx0 + r * Math.cos(toRad(270 + 288)),  y: cy0 + r * Math.sin(toRad(270 + 288)),  status: "live" },
   ];
 
   const draw = useCallback(() => {
@@ -151,11 +157,12 @@ function ConnectionWeb() {
       ctx.lineWidth = 1;
       ctx.stroke();
 
-      // System label
+      // System label — above node if in top half, below if in bottom half
       ctx.font = "600 11px 'DM Sans', sans-serif";
       ctx.fillStyle = "#1B3A5C";
       ctx.textAlign = "center";
-      const labelY = sys.y < 0.5 ? sy + 38 : sy - 30;
+      const isTop = sys.y < 0.5;
+      const labelY = isTop ? sy - 34 : sy + 38;
       ctx.fillText(sys.name, sx, labelY);
 
       // Live dot
@@ -315,7 +322,7 @@ function Sidebar({ view, setView }: { view: View; setView: (v: View) => void }) 
       {/* Bottom */}
       <div style={{ padding: "1rem 1.25rem", borderTop: "1px solid rgba(255,255,255,0.08)" }}>
         <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.72rem", color: "rgba(255,255,255,0.3)" }}>
-          Demo Mode · Cape Leisure Corp
+          Demo Mode
         </div>
         <a href="/" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.75rem", color: "rgba(126,207,196,0.7)", textDecoration: "none", display: "block", marginTop: "0.4rem" }}>
           ← Back to site
@@ -638,7 +645,7 @@ export default function Dashboard() {
   const data = useLiveData();
 
   const viewTitles: Record<View, { title: string; sub: string }> = {
-    overview: { title: "Good morning, Cape Leisure.", sub: "Here's what's happening at Silver Springs right now." },
+    overview: { title: "Good morning.", sub: "Here's what's happening at Silver Springs right now." },
     connections: { title: "System Connections", sub: "Every system talking through Waypoint, live." },
     bookings: { title: "Today's Bookings", sub: `${data.bookingsToday} bookings · ${data.waivers.pending} waivers pending` },
     inventory: { title: "Live Inventory", sub: "Synced from Square + Lightspeed in real time." },

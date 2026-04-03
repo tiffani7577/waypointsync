@@ -144,7 +144,7 @@ function Hero() {
             fontSize: "clamp(1rem, 2vw, 1.2rem)", color: "rgba(255,255,255,0.82)",
             maxWidth: 580, lineHeight: 1.7, marginBottom: "2.5rem",
           }}>
-            Waypoint is the operating layer that connects FareHarbor, Lightspeed, Smartwaiver, and Sage — so your staff runs one transaction on one screen, your inventory stays honest, and you finally get the report that tells you what's actually happening.
+            Waypoint is the operating layer that connects FareHarbor, Lightspeed, Square, and Smartwaiver — so your staff runs one transaction on one screen, your inventory stays honest, and you finally get the report that tells you what's actually happening.
           </p>
           <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
             <a href="#access" style={{
@@ -569,7 +569,7 @@ function Features() {
     {
       num: "04", title: "Operator Intelligence",
       short: "The report that replaces your nightly spreadsheet",
-      body: "Every morning, your daily report is waiting — already pulled from FareHarbor, Lightspeed, and Smartwaiver, formatted and pushed to Sage. No manual reconciliation. No Excel. No 2 AM spreadsheet.",
+      body: "Every morning, your daily report is waiting — already pulled from FareHarbor, Lightspeed, Square, and Smartwaiver, formatted and ready for your accounting system. No manual reconciliation. No Excel. No 2 AM spreadsheet.",
       detail: "Replaces the manual process of pulling from multiple systems into Excel and then into Sage. Revenue per visitor, retail attach rate, guide performance — all automated.",
       color: "#1B3A5C", icon: "📊", solves: "Ordering Blindspot",
     },
@@ -1087,7 +1087,7 @@ function EarlyAccess() {
                   We'll reach out within 48 hours to learn more about your operation and get you set up for the beta. In the meantime, if you have questions, reply to our confirmation email.
                 </p>
                 <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.82rem", color: "rgba(255,255,255,0.45)", lineHeight: 1.6, marginTop: "0.5rem" }}>
-                  Integrations supported: FareHarbor · Lightspeed · Smartwaiver · Sage · Stripe
+                  Integrations supported: FareHarbor · Lightspeed · Square · Smartwaiver · Stripe
                 </p>
               </div>
             </FadeIn>
