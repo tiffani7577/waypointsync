@@ -71,19 +71,14 @@ function ConnectionWeb() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animRef = useRef<number>(0);
   const timeRef = useRef(0);
+  const dprRef = useRef(1);
 
-  // Evenly space 5 nodes in a pentagon around the center (cx=0.5, cy=0.5)
-  // Angles: top=270°, then clockwise every 72°. Radius 0.36 of canvas size.
-  const r = 0.36;
-  const cx0 = 0.5;
-  const cy0 = 0.5;
-  const toRad = (deg: number) => (deg * Math.PI) / 180;
-  const systems = [
-    { name: "FareHarbor",  color: "#1B3A5C", icon: "📅", x: cx0 + r * Math.cos(toRad(270)),       y: cy0 + r * Math.sin(toRad(270)),       status: "live" },
-    { name: "Square POS", color: "#2A7D6F", icon: "💳", x: cx0 + r * Math.cos(toRad(270 + 72)),   y: cy0 + r * Math.sin(toRad(270 + 72)),   status: "live" },
-    { name: "Lightspeed", color: "#C2622D", icon: "📦", x: cx0 + r * Math.cos(toRad(270 + 144)),  y: cy0 + r * Math.sin(toRad(270 + 144)),  status: "live" },
-    { name: "Smartwaiver",color: "#6B4C9A", icon: "✍️", x: cx0 + r * Math.cos(toRad(270 + 216)),  y: cy0 + r * Math.sin(toRad(270 + 216)),  status: "live" },
-    { name: "Stripe",     color: "#5A6B7A", icon: "⚡", x: cx0 + r * Math.cos(toRad(270 + 288)),  y: cy0 + r * Math.sin(toRad(270 + 288)),  status: "live" },
+  const SYSTEMS = [
+    { name: "FareHarbor",  color: "#1B3A5C", status: "live" },
+    { name: "Square POS",  color: "#2A7D6F", status: "live" },
+    { name: "Lightspeed",  color: "#C2622D", status: "live" },
+    { name: "Smartwaiver", color: "#6B4C9A", status: "live" },
+    { name: "Stripe",      color: "#5A6B7A", status: "live" },
   ];
 
   const draw = useCallback(() => {
@@ -91,10 +86,22 @@ function ConnectionWeb() {
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
-    const W = canvas.width;
-    const H = canvas.height;
+    // Use logical (CSS) dimensions for all drawing — DPR scaling is done once via ctx.scale
+    const W = canvas.offsetWidth;
+    const H = canvas.offsetHeight;
+    const dpr = dprRef.current;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, W, H);
     const cx = W / 2;
     const cy = H / 2;
+    // Pentagon: top node at 270°, clockwise every 72°, radius = 38% of shortest dimension
+    const radius = Math.min(W, H) * 0.38;
+    const toRad = (deg: number) => (deg * Math.PI) / 180;
+    const systems = SYSTEMS.map((s, i) => ({
+      ...s,
+      x: cx + radius * Math.cos(toRad(270 + i * 72)),
+      y: cy + radius * Math.sin(toRad(270 + i * 72)),
+    }));
     timeRef.current += 0.012;
     const t = timeRef.current;
 
@@ -102,8 +109,8 @@ function ConnectionWeb() {
 
     // Draw connection lines with animated pulses
     systems.forEach((sys, i) => {
-      const sx = sys.x * W;
-      const sy = sys.y * H;
+      const sx = sys.x;
+      const sy = sys.y;
 
       // Line from system to center
       const grad = ctx.createLinearGradient(sx, sy, cx, cy);
@@ -161,7 +168,7 @@ function ConnectionWeb() {
       ctx.font = "600 11px 'DM Sans', sans-serif";
       ctx.fillStyle = "#1B3A5C";
       ctx.textAlign = "center";
-      const isTop = sys.y < 0.5;
+      const isTop = sys.y < cy;
       const labelY = isTop ? sy - 34 : sy + 38;
       ctx.fillText(sys.name, sx, labelY);
 
@@ -211,10 +218,10 @@ function ConnectionWeb() {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const resize = () => {
-      canvas.width = canvas.offsetWidth * window.devicePixelRatio;
-      canvas.height = canvas.offsetHeight * window.devicePixelRatio;
-      const ctx = canvas.getContext("2d");
-      if (ctx) ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+      const dpr = window.devicePixelRatio || 1;
+      dprRef.current = dpr;
+      canvas.width = canvas.offsetWidth * dpr;
+      canvas.height = canvas.offsetHeight * dpr;
     };
     resize();
     window.addEventListener("resize", resize);
