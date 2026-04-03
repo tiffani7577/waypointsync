@@ -27,7 +27,7 @@ export default function CustomerDisplay() {
       <div className="flex items-center justify-between px-8 py-5 border-b border-white/10">
         <div>
           <p className="text-white font-bold text-2xl tracking-tight">WaypointSync</p>
-          <p className="text-slate-400 text-sm">Florida Caverns State Park</p>
+          <p className="text-slate-400 text-sm">Outdoor Recreation Demo</p>
         </div>
         <div className="text-right">
           <p className="text-slate-300 text-sm">
@@ -114,8 +114,9 @@ export default function CustomerDisplay() {
               <span className="text-4xl">🌿</span>
             </div>
             <p className="text-white text-2xl font-semibold mb-2">Welcome</p>
-            <p className="text-slate-400">Florida Caverns State Park</p>
-            <p className="text-slate-500 text-sm mt-6">Please see a staff member to begin your visit.</p>
+            <p className="text-slate-400">Please see a staff member to begin your visit.</p>
+            <p className="text-slate-500 text-xs mt-2">This display updates live as your transaction is built.</p>
+
           </div>
         )}
       </div>
