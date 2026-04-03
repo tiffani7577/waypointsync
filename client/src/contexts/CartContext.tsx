@@ -1,11 +1,11 @@
 /**
  * WAYPOINTSYNC — CartContext
- * Shared cart state between the staff POS screen and the customer-facing display.
  * POS writes to /api/cart-sync (POST) on every cart change.
- * CustomerDisplay subscribes to /api/cart-stream (SSE) for live cross-device updates.
+ * Server triggers Pusher event; CustomerDisplay subscribes via Pusher for live cross-device updates.
  */
 
-import React, { createContext, useContext, useEffect, useRef, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import Pusher from "pusher-js";
 
 export interface CartItem {
   id: string;
@@ -63,13 +63,13 @@ function generateTxId() {
 
 const CartContext = createContext<CartContextType | null>(null);
 
-// Push cart state to the server so all displays receive it
+// Push cart state to server — server triggers Pusher broadcast to all displays
 function pushCartSync(cart: CartState) {
   fetch("/api/cart-sync", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(cart),
-  }).catch(() => {/* silent — offline queue can be added later */});
+  }).catch(() => {/* silent */});
 }
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
@@ -78,7 +78,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     transactionId: generateTxId(),
   });
 
-  // Wrap setState so every mutation also pushes to server
   const setCart = (updater: CartState | ((prev: CartState) => CartState)) => {
     setCartState(prev => {
       const next = typeof updater === "function" ? updater(prev) : updater;
@@ -154,8 +153,8 @@ export function useCart() {
 
 /**
  * useDisplayCart — used ONLY by CustomerDisplay.
- * Subscribes to the server SSE stream and returns the latest cart state.
- * Works across any two devices on any network.
+ * Subscribes to Pusher channel for live cross-device updates.
+ * Works across any two devices on any network, including Vercel static hosting.
  */
 export function useDisplayCart() {
   const [cart, setCart] = useState<CartState & { subtotal: number; tax: number; total: number }>({
@@ -165,34 +164,25 @@ export function useDisplayCart() {
     tax: 0,
     total: 0,
   });
-  const esRef = useRef<EventSource | null>(null);
 
   useEffect(() => {
-    const connect = () => {
-      const es = new EventSource("/api/cart-stream");
-      esRef.current = es;
-
-      es.onmessage = (e) => {
-        try {
-          const state: CartState = JSON.parse(e.data);
-          const subtotal =
-            (state.booking?.balanceDue ?? 0) +
-            state.items.reduce((sum, i) => sum + i.price * i.quantity, 0);
-          const tax = parseFloat((state.items.reduce((sum, i) => sum + i.price * i.quantity, 0) * 0.07).toFixed(2));
-          const total = parseFloat((subtotal + tax).toFixed(2));
-          setCart({ ...state, subtotal, tax, total });
-        } catch {}
-      };
-
-      es.onerror = () => {
-        es.close();
-        // Reconnect after 3s
-        setTimeout(connect, 3000);
-      };
+    const pusher = new Pusher(import.meta.env.VITE_PUSHER_KEY as string, {
+      cluster: import.meta.env.VITE_PUSHER_CLUSTER as string,
+    });
+    const channel = pusher.subscribe("waypoint-cart");
+    channel.bind("cart-update", (state: CartState) => {
+      const subtotal =
+        (state.booking?.balanceDue ?? 0) +
+        state.items.reduce((sum, i) => sum + i.price * i.quantity, 0);
+      const tax = parseFloat((state.items.reduce((sum, i) => sum + i.price * i.quantity, 0) * 0.07).toFixed(2));
+      const total = parseFloat((subtotal + tax).toFixed(2));
+      setCart({ ...state, subtotal, tax, total });
+    });
+    return () => {
+      channel.unbind_all();
+      pusher.unsubscribe("waypoint-cart");
+      pusher.disconnect();
     };
-
-    connect();
-    return () => { esRef.current?.close(); };
   }, []);
 
   return cart;

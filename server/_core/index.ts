@@ -2,6 +2,7 @@ import "dotenv/config";
 import express from "express";
 import { createServer } from "http";
 import net from "net";
+import Pusher from "pusher";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
 import { registerOAuthRoutes } from "./oauth";
 import { appRouter } from "../routers";
@@ -27,9 +28,14 @@ async function findAvailablePort(startPort: number = 3000): Promise<number> {
   throw new Error(`No available port found starting from ${startPort}`);
 }
 
-// ── Cart sync state (in-memory, single-server) ──────────────────────────────
-let latestCartState: unknown = null;
-const displayClients = new Set<import('http').ServerResponse>();
+// ── Pusher server client for broadcasting cart state to all display screens ────────────
+const pusher = new Pusher({
+  appId: process.env.PUSHER_APP_ID!,
+  key: process.env.VITE_PUSHER_KEY!,
+  secret: process.env.PUSHER_SECRET!,
+  cluster: process.env.VITE_PUSHER_CLUSTER!,
+  useTLS: true,
+});
 
 async function startServer() {
   const app = express();
@@ -40,45 +46,14 @@ async function startServer() {
   // OAuth callback under /api/oauth/callback
   registerOAuthRoutes(app);
 
-  // ── Cart sync: POS pushes state, Display subscribes via SSE ────────────────
-  // POST /api/cart-sync  — called by POS whenever cart changes
-  app.post("/api/cart-sync", (req, res) => {
-    latestCartState = req.body;
-    // Broadcast to all connected display clients
-    for (const client of Array.from(displayClients)) {
-      try {
-        client.write(`data: ${JSON.stringify(latestCartState)}\n\n`);
-      } catch {
-        displayClients.delete(client);
-      }
+  // POST /api/cart-sync — called by POS whenever cart changes, broadcasts via Pusher
+  app.post("/api/cart-sync", async (req, res) => {
+    try {
+      await pusher.trigger("waypoint-cart", "cart-update", req.body);
+    } catch (e) {
+      console.error("[Pusher] trigger failed:", e);
     }
     res.json({ ok: true });
-  });
-
-  // GET /api/cart-stream — SSE endpoint for CustomerDisplay
-  app.get("/api/cart-stream", (req, res) => {
-    res.setHeader("Content-Type", "text/event-stream");
-    res.setHeader("Cache-Control", "no-cache");
-    res.setHeader("Connection", "keep-alive");
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.flushHeaders();
-
-    // Send current state immediately on connect
-    if (latestCartState) {
-      res.write(`data: ${JSON.stringify(latestCartState)}\n\n`);
-    }
-
-    displayClients.add(res);
-
-    // Keep-alive ping every 25s
-    const ping = setInterval(() => {
-      try { res.write(": ping\n\n"); } catch { clearInterval(ping); }
-    }, 25000);
-
-    req.on("close", () => {
-      clearInterval(ping);
-      displayClients.delete(res);
-    });
   });
   // tRPC API
   app.use(

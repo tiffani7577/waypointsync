@@ -139,7 +139,9 @@ export default function POS() {
   const grandTotal = total + tipAmount;
 
   const handleCharge = () => {
-    if (!cart.booking?.waiverSigned) {
+    // Only block checkout if there IS a booking AND the waiver hasn't been signed
+    // Retail-only and food-only transactions (no booking) skip the waiver gate entirely
+    if (cart.booking && !cart.booking.waiverSigned) {
       toast.error("Waiver must be signed before checkout.");
       return;
     }
