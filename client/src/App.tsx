@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard";
 import POS from "./pages/POS";
 import CustomerDisplay from "./pages/CustomerDisplay";
 import DailyReport from "./pages/DailyReport";
+import Receipt from "./pages/Receipt";
 import { CartProvider } from "./contexts/CartContext";
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -19,6 +20,7 @@ function Router() {
       <Route path={"/pos"} component={POS} />
       <Route path={"/display"} component={CustomerDisplay} />
       <Route path={"/report"} component={DailyReport} />
+      <Route path={"/receipt"} component={Receipt} />
       <Route path={"/404"} component={NotFound} />
       <Route component={NotFound} />
     </Switch>

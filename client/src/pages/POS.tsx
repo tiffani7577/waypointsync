@@ -150,9 +150,23 @@ export default function POS() {
   };
 
   const handlePaymentComplete = () => {
+    // Save receipt data to sessionStorage for the /receipt page
+    const receiptData = {
+      transactionId: cart.transactionId,
+      timestamp: new Date().toISOString(),
+      staff: staff?.name ?? "Staff",
+      booking: cart.booking,
+      items: cart.items,
+      subtotal,
+      tax,
+      tipPercent,
+      tipAmount,
+      grandTotal,
+    };
+    sessionStorage.setItem("wp_receipt", JSON.stringify(receiptData));
     setCheckoutStep("complete");
     setStatus("complete");
-    toast.success("Transaction complete! Receipt sent.");
+    toast.success("Transaction complete!");
   };
 
   const handleNewTransaction = () => {
@@ -265,13 +279,19 @@ export default function POS() {
             <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Cart</p>
 
             {checkoutStep === "complete" ? (
-              <div className="flex flex-col items-center justify-center h-40 gap-3">
-                <div className="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center text-2xl">✓</div>
-                <p className="font-semibold text-emerald-700">Transaction Complete</p>
-                <p className="text-xs text-slate-400">Receipt sent · Lightspeed updated · FareHarbor checked in</p>
+              <div className="flex flex-col items-center justify-center gap-3 py-4">
+                <div className="w-14 h-14 rounded-full bg-emerald-100 flex items-center justify-center text-3xl">✓</div>
+                <p className="font-bold text-emerald-700 text-base">Transaction Complete</p>
+                <p className="text-xs text-slate-400 text-center">Lightspeed updated · FareHarbor checked in</p>
+                <button
+                  onClick={() => window.open("/receipt", "_blank")}
+                  className="w-full py-2.5 rounded-xl text-sm font-semibold border border-slate-200 text-slate-700 hover:bg-slate-50 transition-colors"
+                >
+                  🖨 Print / View Receipt
+                </button>
                 <button
                   onClick={handleNewTransaction}
-                  className="mt-2 px-4 py-2 rounded-lg text-sm font-semibold text-white transition-colors"
+                  className="w-full py-2.5 rounded-xl text-sm font-bold text-white transition-colors"
                   style={{ background: TEAL }}
                 >
                   New Transaction
