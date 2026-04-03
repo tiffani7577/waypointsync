@@ -63,18 +63,18 @@ function Nav() {
     }}>
       <div style={{ maxWidth: 1280, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", height: 68 }}>
         <a href="#" style={{ textDecoration: "none" }}>
-          <WaypointLogo size={28} light={!scrolled && false} />
+          <WaypointLogo size={28} light={!scrolled} />
         </a>
         {/* Desktop links */}
         <div style={{ display: "flex", alignItems: "center", gap: "2rem" }} className="hidden md:flex">
           {links.map(l => (
             <a key={l.href} href={l.href} style={{
               fontFamily: "'DM Sans', sans-serif", fontWeight: 500, fontSize: "0.9rem",
-              color: "#1B3A5C", textDecoration: "none", opacity: 0.8,
-              transition: "opacity 0.2s",
+              color: scrolled ? "#1B3A5C" : "rgba(255,255,255,0.92)", textDecoration: "none", opacity: 0.9,
+              transition: "color 0.3s, opacity 0.2s",
             }}
               onMouseEnter={e => (e.currentTarget.style.opacity = "1")}
-              onMouseLeave={e => (e.currentTarget.style.opacity = "0.8")}
+              onMouseLeave={e => (e.currentTarget.style.opacity = "0.9")}
             >{l.label}</a>
           ))}
           <a href="#access" className="wp-btn-primary" style={{ padding: "0.6rem 1.4rem", fontSize: "0.88rem" }}>
@@ -83,9 +83,9 @@ function Nav() {
         </div>
         {/* Mobile hamburger */}
         <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)} style={{ background: "none", border: "none", cursor: "pointer", padding: "0.5rem" }}>
-          <div style={{ width: 22, height: 2, background: "#1B3A5C", marginBottom: 5, borderRadius: 2 }} />
-          <div style={{ width: 22, height: 2, background: "#1B3A5C", marginBottom: 5, borderRadius: 2 }} />
-          <div style={{ width: 22, height: 2, background: "#1B3A5C", borderRadius: 2 }} />
+          <div style={{ width: 22, height: 2, background: scrolled ? "#1B3A5C" : "white", marginBottom: 5, borderRadius: 2 }} />
+          <div style={{ width: 22, height: 2, background: scrolled ? "#1B3A5C" : "white", marginBottom: 5, borderRadius: 2 }} />
+          <div style={{ width: 22, height: 2, background: scrolled ? "#1B3A5C" : "white", borderRadius: 2 }} />
         </button>
       </div>
       {/* Mobile menu */}
