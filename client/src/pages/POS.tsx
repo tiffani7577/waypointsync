@@ -100,17 +100,7 @@ export default function POS() {
   const [showBookingSearch, setShowBookingSearch] = useState(!cart.booking);
   const [checkoutStep, setCheckoutStep] = useState<"cart" | "payment" | "complete">("cart");
   const [staff, setStaff] = useState<{ name: string; role: string } | null>(getSession);
-
-  if (!staff) {
-    return (
-      <PINScreen
-        onUnlock={(name, role) => {
-          setSession(name, role);
-          setStaff({ name, role });
-        }}
-      />
-    );
-  }
+  const [tipPercent, setTipPercent] = useState<number | null>(null);
 
   const filteredBookings = useMemo(() => {
     if (!search.trim()) return MOCK_BOOKINGS;
@@ -135,7 +125,16 @@ export default function POS() {
     toast.success(`Added ${product.name}`);
   };
 
-  const [tipPercent, setTipPercent] = useState<number | null>(null);
+  if (!staff) {
+    return (
+      <PINScreen
+        onUnlock={(name, role) => {
+          setSession(name, role);
+          setStaff({ name, role });
+        }}
+      />
+    );
+  }
   const tipAmount = tipPercent !== null ? (subtotal * tipPercent) / 100 : 0;
   const grandTotal = total + tipAmount;
 
