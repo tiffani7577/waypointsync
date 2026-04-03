@@ -80,7 +80,7 @@ export default function CustomerDisplay() {
             </div>
             <p className="text-slate-500 text-xs mt-6 animate-pulse">Awaiting payment…</p>
           </div>
-        ) : cart.status === "active" && allLineItems.length > 0 ? (
+        ) : cart.status === "active" ? (
           <div className="w-full max-w-lg">
             <p className="text-slate-400 text-sm uppercase tracking-widest mb-4 text-center">Your Order</p>
             {cart.booking && (
@@ -89,24 +89,30 @@ export default function CustomerDisplay() {
                 <p className="text-slate-400 text-sm">{cart.booking.tourName} · {cart.booking.tourTime} · Party of {cart.booking.partySize}</p>
               </div>
             )}
-            <div className="bg-white/5 rounded-2xl p-5 space-y-2">
-              {allLineItems.map(item => (
-                <div key={item.id} className="flex justify-between text-sm">
-                  <span className="text-slate-300">{item.name}{item.quantity > 1 ? ` ×${item.quantity}` : ""}</span>
-                  <span className="text-white font-medium">${(item.price * item.quantity).toFixed(2)}</span>
-                </div>
-              ))}
-              {tax > 0 && (
-                <div className="flex justify-between text-sm border-t border-white/10 pt-2 mt-2">
-                  <span className="text-slate-400">Tax (7%)</span>
-                  <span className="text-slate-300">${tax.toFixed(2)}</span>
-                </div>
-              )}
-              <div className="flex justify-between font-bold border-t border-white/20 pt-2 mt-2">
-                <span className="text-white">Running Total</span>
-                <span className="text-white text-2xl">${total.toFixed(2)}</span>
+            {allLineItems.length === 0 ? (
+              <div className="text-center py-8">
+                <p className="text-slate-500 text-sm animate-pulse">Staff is preparing your order…</p>
               </div>
-            </div>
+            ) : (
+              <div className="bg-white/5 rounded-2xl p-5 space-y-2">
+                {allLineItems.map(item => (
+                  <div key={item.id} className="flex justify-between text-sm">
+                    <span className="text-slate-300">{item.name}{item.quantity > 1 ? ` ×${item.quantity}` : ""}</span>
+                    <span className="text-white font-medium">${(item.price * item.quantity).toFixed(2)}</span>
+                  </div>
+                ))}
+                {tax > 0 && (
+                  <div className="flex justify-between text-sm border-t border-white/10 pt-2 mt-2">
+                    <span className="text-slate-400">Tax (7%)</span>
+                    <span className="text-slate-300">${tax.toFixed(2)}</span>
+                  </div>
+                )}
+                <div className="flex justify-between font-bold border-t border-white/20 pt-2 mt-2">
+                  <span className="text-white">Running Total</span>
+                  <span className="text-white text-2xl">${total.toFixed(2)}</span>
+                </div>
+              </div>
+            )}
           </div>
         ) : (
           <div className="text-center">
