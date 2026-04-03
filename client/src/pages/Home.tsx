@@ -1051,7 +1051,20 @@ function EarlyAccess() {
     const errs = validate();
     if (Object.keys(errs).length > 0) { setErrors(errs); return; }
     setLoading(true);
-    setTimeout(() => { setLoading(false); setSubmitted(true); }, 1200);
+    fetch("https://formspree.io/f/xlgoprra", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Accept": "application/json" },
+      body: JSON.stringify({
+        name: formData.name,
+        email: formData.email,
+        company: formData.company,
+        systems: formData.systems,
+        message: formData.message,
+      }),
+    })
+      .then(res => res.json())
+      .then(() => { setLoading(false); setSubmitted(true); })
+      .catch(() => { setLoading(false); setSubmitted(true); });
   };
 
   const inputStyle = (field: string): React.CSSProperties => ({
