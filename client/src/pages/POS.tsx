@@ -278,16 +278,24 @@ export default function POS() {
                 </button>
               </div>
             ) : checkoutStep === "payment" ? (
-              <div className="flex flex-col items-center justify-center h-40 gap-3">
-                <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-2xl animate-pulse">💳</div>
-                <p className="font-semibold text-slate-700">Awaiting Payment</p>
-                <p className="text-xs text-slate-400">Customer display shows total: <strong>${total.toFixed(2)}</strong></p>
+              <div className="flex flex-col items-center gap-3 py-2">
+                <div className="w-full rounded-xl border-2 border-dashed border-blue-200 bg-blue-50 p-4 flex flex-col items-center gap-2">
+                  <div className="text-3xl animate-pulse">💳</div>
+                  <p className="font-bold text-slate-700">Swipe, Tap, or Insert Card</p>
+                  <p className="text-lg font-bold text-slate-900">${grandTotal.toFixed(2)}</p>
+                  <div className="flex gap-2 mt-1">
+                    <span className="text-xs bg-white border border-slate-200 rounded px-2 py-1 text-slate-500">💳 Swipe</span>
+                    <span className="text-xs bg-white border border-slate-200 rounded px-2 py-1 text-slate-500">📱 Tap</span>
+                    <span className="text-xs bg-white border border-slate-200 rounded px-2 py-1 text-slate-500">🔢 Insert</span>
+                  </div>
+                  <p className="text-xs text-slate-400 mt-1">Customer display is live ↗</p>
+                </div>
                 <button
                   onClick={handlePaymentComplete}
-                  className="mt-2 px-4 py-2 rounded-lg text-sm font-semibold text-white transition-colors"
+                  className="w-full py-3 rounded-xl text-sm font-bold text-white shadow transition-colors"
                   style={{ background: TEAL }}
                 >
-                  Confirm Payment ✓
+                  ✓ Payment Received — Complete Sale
                 </button>
                 <button onClick={() => { setCheckoutStep("cart"); setStatus("active"); }} className="text-xs text-slate-400 hover:text-slate-600">
                   ← Back to Cart
