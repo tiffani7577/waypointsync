@@ -255,8 +255,17 @@ function ConnectionWeb() {
   );
 }
 
+const LOCATIONS = [
+  { id: "silver-springs", name: "Silver Springs, FL", status: "live" },
+  { id: "wakulla",        name: "Wakulla Springs, FL", status: "live" },
+  { id: "ichetucknee",   name: "Ichetucknee Springs, FL", status: "live" },
+];
+
 // ─── Sidebar ──────────────────────────────────────────────────────────────────
 function Sidebar({ view, setView }: { view: View; setView: (v: View) => void }) {
+  const [locationId, setLocationId] = useState("silver-springs");
+  const [locOpen, setLocOpen] = useState(false);
+  const activeLoc = LOCATIONS.find(l => l.id === locationId) || LOCATIONS[0];
   const navItems: { id: View; label: string; icon: string; badge?: number }[] = [
     { id: "overview", label: "Overview", icon: "◉" },
     { id: "connections", label: "Connections", icon: "⬡" },
@@ -282,13 +291,52 @@ function Sidebar({ view, setView }: { view: View; setView: (v: View) => void }) 
       </div>
 
       {/* Location selector */}
-      <div style={{ padding: "0.75rem 1rem", margin: "0.75rem 0.75rem 0", background: "rgba(255,255,255,0.06)", borderRadius: "0.5rem" }}>
-        <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.68rem", color: "rgba(255,255,255,0.4)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "0.3rem" }}>Location</div>
-        <div style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 600, fontSize: "0.88rem", color: "white" }}>Silver Springs, FL</div>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", marginTop: "0.25rem" }}>
-          <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#2A7D6F" }} />
-          <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.72rem", color: "rgba(255,255,255,0.5)" }}>All systems live</span>
-        </div>
+      <div style={{ margin: "0.75rem 0.75rem 0", position: "relative" }}>
+        <button
+          onClick={() => setLocOpen(o => !o)}
+          style={{
+            width: "100%", padding: "0.75rem 1rem",
+            background: "rgba(255,255,255,0.06)", borderRadius: "0.5rem",
+            border: "1px solid rgba(255,255,255,0.1)", cursor: "pointer", textAlign: "left",
+          }}
+        >
+          <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.68rem", color: "rgba(255,255,255,0.4)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "0.3rem" }}>Location</div>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <span style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 600, fontSize: "0.85rem", color: "white" }}>{activeLoc.name}</span>
+            <span style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.7rem" }}>{locOpen ? "▲" : "▼"}</span>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", marginTop: "0.25rem" }}>
+            <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#2A7D6F" }} />
+            <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.72rem", color: "rgba(255,255,255,0.5)" }}>All systems live</span>
+          </div>
+        </button>
+        {locOpen && (
+          <div style={{
+            position: "absolute", top: "calc(100% + 4px)", left: 0, right: 0,
+            background: "#1B3A5C", border: "1px solid rgba(255,255,255,0.15)",
+            borderRadius: "0.5rem", overflow: "hidden", zIndex: 50,
+            boxShadow: "0 8px 24px rgba(0,0,0,0.4)",
+          }}>
+            {LOCATIONS.map(loc => (
+              <button
+                key={loc.id}
+                onClick={() => { setLocationId(loc.id); setLocOpen(false); }}
+                style={{
+                  width: "100%", padding: "0.65rem 1rem", textAlign: "left",
+                  background: loc.id === locationId ? "rgba(42,125,111,0.2)" : "transparent",
+                  border: "none", cursor: "pointer",
+                  borderLeft: loc.id === locationId ? "3px solid #2A7D6F" : "3px solid transparent",
+                }}
+                onMouseEnter={e => { if (loc.id !== locationId) e.currentTarget.style.background = "rgba(255,255,255,0.06)"; }}
+                onMouseLeave={e => { if (loc.id !== locationId) e.currentTarget.style.background = "transparent"; }}
+              >
+                <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.83rem", color: loc.id === locationId ? "#7ECFC4" : "rgba(255,255,255,0.75)", fontWeight: loc.id === locationId ? 600 : 400 }}>
+                  {loc.name}
+                </span>
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Nav */}
